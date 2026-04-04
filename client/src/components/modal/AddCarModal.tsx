@@ -15,6 +15,7 @@ import { useTheme } from '@mui/material';
 interface AddCarModalProps {
     open: boolean;
     onClose: () => void;
+    onSave: (carName: string) => void;
 }
 
 const cars = [
@@ -24,7 +25,7 @@ const cars = [
     { label: 'BMW i3', battery: 42, range: 260 },
 ];
 
-export default function AddCarModal({ open, onClose }: AddCarModalProps) {
+export default function AddCarModal({ open, onClose, onSave }: AddCarModalProps) {
     const theme = useTheme();
 
     const [selectedCar, setSelectedCar] = useState('');
@@ -49,22 +50,19 @@ export default function AddCarModal({ open, onClose }: AddCarModalProps) {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-
                     width: '90%',
                     maxWidth: 420,
                     p: 3,
                     borderRadius: 2,
-
                     background:
                         theme.palette.mode === 'dark'
                             ? 'rgba(255,255,255,0.05)'
                             : 'rgba(255,255,255,0.95)',
-
                     backdropFilter: 'blur(20px)',
                 }}
             >
                 <Typography variant="h6" mb={2}>
-                    Добавить электро бибику
+                    Добавить авто
                 </Typography>
 
                 <Stack spacing={2}>
@@ -100,8 +98,12 @@ export default function AddCarModal({ open, onClose }: AddCarModalProps) {
 
                     <Button
                         variant="contained"
-                        onClick={onClose}
+                        onClick={() => {
+                            onSave(selectedCar);
+                            onClose();
+                        }}
                         sx={{ borderRadius: '999px' }}
+                        disabled={!selectedCar}
                     >
                         Сохранить
                     </Button>
