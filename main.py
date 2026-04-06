@@ -12,4 +12,3 @@ app.add_middleware(
     allow_origins=True,
     allow_methods=True,
 )
- 
