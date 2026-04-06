@@ -11,5 +11,5 @@ class UserModel(Base):
     first_name: Mapped[str] = mapped_column()
     last_name: Mapped[str] = mapped_column()
     profile_photo: Mapped[str]
-    cars = Mapped[str]
-    favorite_stations = Mapped[str]
+    cars: Mapped[str]
+    favorite_stations: Mapped[str]
