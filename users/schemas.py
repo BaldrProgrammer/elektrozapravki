@@ -9,4 +9,6 @@ class SUserReg(BaseModel):
     profile_photo: str
 
 
-
+class SUserAuth(BaseModel):
+    email: str
+    hashed_password: str
