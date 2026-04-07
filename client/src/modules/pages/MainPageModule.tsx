@@ -40,7 +40,7 @@ export default function MainPageModule() {
                         </Typography>
                     </Box>
                     <Box sx={{display: 'flex', justifyContent: 'center', mt:1,}}>
-                        <ButtonStation onClick={()=>(navigate.push('/public/auth'))}> Пора начать </ButtonStation>
+                        <ButtonStation onClick={()=>(navigate.push('/public/map'))}> Пора начать </ButtonStation>
                     </Box>
                 </Box>
             </Container>
