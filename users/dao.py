@@ -1,4 +1,4 @@
-from ..dao.base import BaseDAO
+from dao.base import BaseDAO
 
 
 class UserDAO(BaseDAO):
