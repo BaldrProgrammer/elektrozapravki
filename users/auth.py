@@ -33,6 +33,12 @@ async def decode_token(token: str):
 
 
 async def get_current_user(request: Request) -> UserModel | None:
-    token = request.cookies.get('access_token')
-    uid = (await decode_token(token))['uid']
-    return await UserDAO.find_all(user_id=uid)
+    try:
+        token = request.cookies.get('access_token')
+        if not token:
+            return None
+
+        uid = (await decode_token(token))['uid']
+        return await UserDAO.find_all(user_id=uid)
+    except ExpiredSignatureError:
+        return None
