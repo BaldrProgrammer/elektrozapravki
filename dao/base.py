@@ -1,7 +1,7 @@
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.future import select
 
 from database import session_maker
-from users.models import UserModel
 
 
 class BaseDAO:
@@ -27,3 +27,15 @@ class BaseDAO:
             query = select(cls).filter_by(id=value_id)
             result = await session.execute(query)
             return result.scalars().one_or_none()
+
+    @classmethod
+    async def add(cls, **values):
+        async with session_maker() as session:
+            try:
+                new_instance = cls.model(**values)
+                session.add(new_instance)
+                session.commit()
+            except SQLAlchemyError as e:
+                session.rollback()
+                raise e
+            return new_instance
