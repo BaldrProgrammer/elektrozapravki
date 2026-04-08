@@ -21,4 +21,7 @@ settings = Settings()
 
 def get_database_url():
     return f'postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_DATABASE}'
- 
+
+
+def get_token_data():
+    return {'key': settings.KEY, 'algorithm': settings.ALGORITHM}

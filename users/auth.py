@@ -1,4 +1,5 @@
 from passlib.context import CryptContext
+from jose import jwt
 
 context = CryptContext(schemes=['bcrypt'])
 
