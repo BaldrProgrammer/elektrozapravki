@@ -30,3 +30,9 @@ async def encode_token(data: dict):
 async def decode_token(token: str):
     auth_data = get_token_data()
     return jwt.decode(token, auth_data['key'])
+
+
+async def get_current_user(request: Request) -> UserModel | None:
+    token = request.cookies.get('access_token')
+    uid = (await decode_token(token))['uid']
+    return await UserDAO.find_all(user_id=uid)
