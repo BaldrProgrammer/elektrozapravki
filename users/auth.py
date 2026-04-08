@@ -22,3 +22,8 @@ def encode_token(data: dict):
     to_encode.update({'exp': delay})
     auth_data = get_token_data()
     return jwt.encode(to_encode, auth_data['key'], auth_data['algorithm'])
+
+
+def decode_token(token: str):
+    auth_data = get_token_data()
+    return jwt.decode(token, auth_data['key'])
