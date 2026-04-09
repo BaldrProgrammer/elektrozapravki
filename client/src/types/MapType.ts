@@ -40,3 +40,9 @@ export interface IMarkerRootInfo {
     root: any;
     el: HTMLElement;
 }
+
+export interface IStations {
+    x: number,
+    y: number,
+    id: number,
+}

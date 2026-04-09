@@ -4,7 +4,7 @@ export const osmConfig: IMapConfig = {
     style: {
         version: 8,
         name: 'Kaliningrad OSM Style',
-        center: [20.51, 54.71],
+        center: [20.494614, 54.709996],
         zoom: 12,
         bearing: 0,
         pitch: 0,

@@ -10,6 +10,9 @@ import CustomMarker from './CustomMarker';
 import { osmConfig } from './osmConfig';
 import CustomZoomButtons from '../Buttons/CustomZoomButtons';
 import { KALININGRAD_CENTER } from '@/utils/geo/geoUtils';
+import {IStations} from "@/types/MapType";
+import type {FeatureCollection, Point} from "geojson";
+
 
 interface IActionMapProps {
     center?: [number, number];
@@ -17,12 +20,15 @@ interface IActionMapProps {
     onMapLoad?: (map: maplibregl.Map) => void;
     markerColor?: string;
     interactive?: boolean;
+
+    stations: IStations[];
 }
 
 const ActionMap: React.FC<IActionMapProps> = ({
                                                   center,
                                                   onMapMove,
                                                   onMapLoad,
+                                                  stations,
                                                   markerColor = '#1A1A1A',
                                                   interactive = true,
                                               }) => {
@@ -37,6 +43,20 @@ const ActionMap: React.FC<IActionMapProps> = ({
     const [mapReady, setMapReady] = useState(false);
     const [mapError, setMapError] = useState<string | null>(null);
     const moveTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    const getGeoJSON = useCallback((stations:IStations[]): FeatureCollection<Point> =>({
+        type: 'FeatureCollection',
+        features: stations.map((s) => ({
+            type: 'Feature',
+            properties: {
+                id: s.id,
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [s.x, s.y],
+            },
+        })),
+    }), [])
 
     useEffect(() => {
         if (!mapContainer.current || mapRef.current) return;
@@ -176,6 +196,36 @@ const ActionMap: React.FC<IActionMapProps> = ({
             }
         };
     }, [mapReady, markerColor, isMobile, isTablet]);
+
+    // Отрисовка электро станций
+    useEffect(() => {
+        if (!mapRef.current || !mapReady || !stations) return;
+
+        const map = mapRef.current
+        const data = getGeoJSON(stations);
+
+        if (map.getSource('dot-stations')) {
+            (map.getSource('dot-stations') as maplibregl.GeoJSONSource).setData(data);
+            return;
+        }
+
+        map.addSource('dot-stations', {
+            type: 'geojson',
+            data,
+        });
+
+        map.addLayer({
+            id:'dot-station-layer',
+            type:'circle',
+            source:'dot-stations',
+            paint:{
+                'circle-radius': 6,
+                'circle-color': '#00C853',
+            }
+        })
+
+    }, [stations, mapReady]);
+
 
     const handleZoomIn = () => {
         if (mapRef.current) {
