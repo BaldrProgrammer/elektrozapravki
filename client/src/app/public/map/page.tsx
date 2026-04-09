@@ -1,4 +1,4 @@
-import MapPageModule from "@/modules/pages/MapPageModule";
+import MapPageModule from "@/modules/Pages/MapPageModule";
 
 export default function Map() {
     return(

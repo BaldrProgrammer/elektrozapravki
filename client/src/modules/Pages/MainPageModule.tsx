@@ -2,7 +2,7 @@
 
 
 import {Box, Typography, Container} from "@mui/material";
-import NavBar from "@/components/Navbar/NavBar";
+import NavBar from "@/components/NavBar/NavBar";
 import ButtonStation from "@/components/Buttons/ButtonStation";
 import {useRouter} from "next/navigation";
 
@@ -21,12 +21,12 @@ export default function MainPageModule() {
             <NavBar/>
             <Container
                 sx={{
-                width: '100%',
+                    width: '100%',
                     height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
                 <Box>
                     <Box>
                         <Typography variant="h1" align="center" >
