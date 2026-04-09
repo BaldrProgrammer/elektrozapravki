@@ -3,10 +3,12 @@ import {useTheme} from "@mui/material";
 import { Box, AppBar, Toolbar } from "@mui/material";
 import { ThemeToggle } from "@/components/Buttons/ThemeToggle";
 import Logo from "@/components/Logo/Logo";
-
+import ButtonStation from "@/components/Buttons/ButtonStation";
+import {useRouter} from "next/navigation";
 
 export default function NavBar() {
     const theme = useTheme()
+    const navigate = useRouter()
 
     return (
         <AppBar
@@ -36,6 +38,7 @@ export default function NavBar() {
                     <Logo/>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <ButtonStation onClick={()=>(navigate.push('/public/auth'))}>Войти</ButtonStation>
                     <ThemeToggle />
                 </Box>
             </Toolbar>

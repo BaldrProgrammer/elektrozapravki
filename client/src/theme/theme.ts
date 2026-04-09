@@ -2,218 +2,171 @@
 
 import { createTheme, ThemeOptions } from '@mui/material/styles';
 
-// Цветовая палитра проекта
 const colors = {
-    // Темная тема
     dark: {
-        background: '#101d26',
-        surface: '#1f2f40',
-        text: '#dde2e5',
-        textSecondary: '#b0c4ce',
-        divider: 'rgba(255, 255, 255, 0.12)',
+        background: '#06021d',
+        surface: '#0f0a2a',
+        surfaceLight: '#1a1240',
+        text: '#e8e4ff',
+        textSecondary: '#ad8bfb',
+        divider: 'rgba(173, 139, 251, 0.2)',
     },
-    // Светлая тема
     light: {
-        background: '#f5f5f5',
+        background: '#f6f4ff',
         surface: '#ffffff',
-        text: '#101d26',
-        textSecondary: '#1f2f40',
-        divider: 'rgba(0, 0, 0, 0.12)',
+        surfaceLight: '#f0ebff',
+        text: '#06021d',
+        textSecondary: '#7455f8',
+        divider: 'rgba(116, 85, 248, 0.2)',
     },
-    // Общие цвета (не зависят от темы)
-    primary: '#f8500a',
-    secondary: '#FB8D23',
-    error: '#f44336',
-    warning: '#ff9800',
-    success: '#4caf50',
-    info: '#2196f3',
+
+    primary: '#7455f8',
+    primaryLight: '#ad8bfb',
+    primarySoft: '#e8e4ff',
 };
 
 export const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     palette: {
         mode,
+
         primary: {
             main: colors.primary,
-            light: colors.secondary,
-            dark: '#d43f00',
-            contrastText: mode === 'dark' ? colors.dark.text : colors.light.text,
+            light: colors.primaryLight,
+            dark: '#5a3ae0',
+            contrastText: colors.dark.text,
         },
+
         secondary: {
-            main: colors.secondary,
-            light: '#ffa347',
-            dark: '#e67a00',
-            contrastText: mode === 'dark' ? colors.dark.text : colors.light.text,
+            main: colors.primaryLight,
+            light: '#c2a9ff',
+            dark: '#8a6cf5',
+            contrastText: colors.dark.text,
         },
+
         background: {
             default: mode === 'dark' ? colors.dark.background : colors.light.background,
             paper: mode === 'dark' ? colors.dark.surface : colors.light.surface,
         },
+
         text: {
             primary: mode === 'dark' ? colors.dark.text : colors.light.text,
             secondary: mode === 'dark' ? colors.dark.textSecondary : colors.light.textSecondary,
-            disabled: mode === 'dark' ? '#6f8f9c' : '#9e9e9e',
         },
-        error: {
-            main: colors.error,
-        },
-        warning: {
-            main: colors.warning,
-        },
-        success: {
-            main: colors.success,
-        },
-        info: {
-            main: colors.info,
-        },
+
         divider: mode === 'dark' ? colors.dark.divider : colors.light.divider,
     },
+
     typography: {
-        fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+        fontFamily: 'var(--font-inter), sans-serif',
+
         h1: {
             fontSize: '2.5rem',
             fontWeight: 600,
+            background: `linear-gradient(135deg, ${colors.primarySoft}, ${colors.primaryLight})`,
+            WebkitBackgroundClip: 'text',
+            color: 'transparent',
         },
-        h2: {
-            fontSize: '2rem',
-            fontWeight: 600,
-        },
-        h3: {
-            fontSize: '1.75rem',
-            fontWeight: 600,
-        },
-        h4: {
-            fontSize: '1.5rem',
-            fontWeight: 600,
-        },
-        h5: {
-            fontSize: '1.25rem',
-            fontWeight: 600,
-        },
-        h6: {
-            fontSize: '1rem',
-            fontWeight: 600,
-        },
-        body1: {
-            fontSize: '1rem',
-            lineHeight: 1.5,
-        },
-        body2: {
-            fontSize: '0.875rem',
-            lineHeight: 1.43,
-        },
+
+        h2: { fontSize: '2rem', fontWeight: 600 },
+        h3: { fontSize: '1.75rem', fontWeight: 600 },
+        h4: { fontSize: '1.5rem', fontWeight: 600 },
+        h5: { fontSize: '1.25rem', fontWeight: 600 },
+        h6: { fontSize: '1rem', fontWeight: 600 },
+
+        body1: { fontSize: '1rem' },
+        body2: { fontSize: '0.875rem' },
+
         button: {
             textTransform: 'none',
-            fontWeight: 500,
+            fontWeight: 600,
         },
     },
+
     shape: {
-        borderRadius: 8,
+        borderRadius: 14,
     },
+
     components: {
         MuiButton: {
             styleOverrides: {
                 root: {
-                    borderRadius: 40,
-                    textTransform: 'none',
+                    borderRadius: 999,
+                    padding: '10px 24px',
                     fontWeight: 600,
-                    padding: '8px 24px',
-                    transition: 'all 0.2s ease',
+                    transition: 'all 0.3s ease',
                 },
+
                 contained: {
-                    boxShadow: 'none',
+                    background: `linear-gradient(135deg, ${colors.primary}, ${colors.primaryLight})`,
+                    boxShadow: `0 0 20px ${colors.primary}55`,
+
                     '&:hover': {
-                        boxShadow: 'none',
-                        transform: 'translateY(-1px)',
+                        boxShadow: `0 0 30px ${colors.primary}aa`,
+                        transform: 'translateY(-2px)',
                     },
                 },
+
                 outlined: {
                     borderColor: colors.primary,
                     color: colors.primary,
+
                     '&:hover': {
-                        borderColor: colors.secondary,
-                        backgroundColor: 'rgba(248, 80, 10, 0.04)',
+                        borderColor: colors.primaryLight,
+                        backgroundColor: `${colors.primary}14`,
                     },
                 },
             },
         },
+
         MuiPaper: {
             styleOverrides: {
                 root: {
                     backgroundImage: 'none',
-                },
-                elevation1: {
-                    boxShadow: mode === 'dark'
-                        ? '0 2px 8px rgba(0, 0, 0, 0.15)'
-                        : '0 2px 8px rgba(0, 0, 0, 0.05)',
-                },
-                elevation2: {
-                    boxShadow: mode === 'dark'
-                        ? '0 4px 12px rgba(0, 0, 0, 0.2)'
-                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(12px)',
+                    backgroundColor:
+                        mode === 'dark'
+                            ? 'rgba(15, 10, 42, 0.7)'
+                            : '#ffffffcc',
+                    border: `1px solid ${colors.dark.divider}`,
                 },
             },
         },
+
         MuiCard: {
             styleOverrides: {
                 root: {
-                    borderRadius: 12,
-                },
-            },
-        },
-        MuiAppBar: {
-            styleOverrides: {
-                root: {
-                    backgroundImage: 'none',
-                },
-            },
-        },
-        MuiChip: {
-            styleOverrides: {
-                root: {
                     borderRadius: 16,
-                },
-                colorPrimary: {
-                    backgroundColor: colors.primary,
-                    color: mode === 'dark' ? colors.dark.text : colors.light.text,
-                },
-                colorSecondary: {
-                    backgroundColor: colors.secondary,
-                    color: mode === 'dark' ? colors.dark.text : colors.light.text,
-                },
-            },
-        },
-        MuiDivider: {
-            styleOverrides: {
-                root: {
-                    borderColor: mode === 'dark' ? colors.dark.divider : colors.light.divider,
+                    background:
+                        mode === 'dark'
+                            ? 'linear-gradient(145deg, #0f0a2a, #1a1240)'
+                            : '#fff',
+                    border: `1px solid ${colors.dark.divider}`,
+                    transition: '0.3s',
+
+                    '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: `0 10px 30px ${colors.primary}33`,
+                    },
                 },
             },
         },
-        MuiSkeleton: {
+
+        MuiTextField: {
             styleOverrides: {
                 root: {
-                    backgroundColor: mode === 'dark'
-                        ? 'rgba(255, 255, 255, 0.08)'
-                        : 'rgba(0, 0, 0, 0.08)',
-                },
-            },
-        },
-        MuiAlert: {
-            styleOverrides: {
-                root: {
-                    borderRadius: 8,
-                },
-            },
-        },
-        MuiToggleButton: {
-            styleOverrides: {
-                root: {
-                    borderRadius: 40,
-                    '&.Mui-selected': {
-                        backgroundColor: colors.primary,
-                        color: mode === 'dark' ? colors.dark.text : colors.light.text,
-                        '&:hover': {
-                            backgroundColor: colors.secondary,
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: 12,
+
+                        '& fieldset': {
+                            borderColor: colors.dark.divider,
+                        },
+
+                        '&:hover fieldset': {
+                            borderColor: colors.primary,
+                        },
+
+                        '&.Mui-focused fieldset': {
+                            borderColor: colors.primary,
                         },
                     },
                 },
@@ -222,15 +175,13 @@ export const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     },
 });
 
-// Создаем тему для светлого и темного режима
-export const lightTheme = createTheme(getDesignTokens('light'));
 export const darkTheme = createTheme(getDesignTokens('dark'));
+export const lightTheme = createTheme(getDesignTokens('light'));
 
-// Градиенты для обеих тем
 export const gradients = {
-    primary: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-    darkToPrimary: `linear-gradient(135deg, ${colors.dark.background} 0%, ${colors.primary} 100%)`,
-    lightToPrimary: `linear-gradient(135deg, ${colors.light.background} 0%, ${colors.primary} 100%)`,
+    primary: `linear-gradient(135deg, ${colors.primary}, ${colors.primaryLight})`,
+    soft: `linear-gradient(135deg, ${colors.primarySoft}, ${colors.primaryLight})`,
+    background: `radial-gradient(circle at top, #06021d, #02000a)`,
 };
 
 export default darkTheme;
