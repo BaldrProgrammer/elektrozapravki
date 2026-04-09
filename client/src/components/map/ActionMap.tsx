@@ -7,6 +7,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibregl from 'maplibre-gl';
 import { createRoot } from 'react-dom/client';
 import CustomMarker from './CustomMarker';
+import CustomMarkerAZS from "@/components/map/CustomMarkerAZS";
 import { osmConfig } from './osmConfig';
 import CustomZoomButtons from '../Buttons/CustomZoomButtons';
 import { KALININGRAD_CENTER } from '@/utils/geo/geoUtils';
@@ -39,6 +40,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
     const markerRef = useRef<HTMLDivElement | null>(null);
+    const stationsMarkersRef = useRef<maplibregl.Marker[]>([]);
     const rootRef = useRef<any>(null);
     const [mapReady, setMapReady] = useState(false);
     const [mapError, setMapError] = useState<string | null>(null);
@@ -146,86 +148,95 @@ const ActionMap: React.FC<IActionMapProps> = ({
     }, [center, mapReady]);
 
     // Создание маркера (фиксированного в центре)
-    useEffect(() => {
-        if (!mapContainer.current || !mapReady) return;
+    // useEffect(() => {
+    //     if (!mapContainer.current || !mapReady) return;
+    //
+    //     // Удаляем старый маркер
+    //     if (markerRef.current) {
+    //         markerRef.current.remove();
+    //         markerRef.current = null;
+    //     }
+    //
+    //     if (rootRef.current) {
+    //         try {
+    //             rootRef.current.unmount();
+    //         } catch (e) {
+    //             console.error('Ошибка размонтирования маркера:', e);
+    //         }
+    //         rootRef.current = null;
+    //     }
+    //
+    //     // Создаем контейнер для маркера
+    //     const markerContainer = document.createElement('div');
+    //     markerContainer.style.position = 'absolute';
+    //     markerContainer.style.top = '50%';
+    //     markerContainer.style.left = '50%';
+    //     markerContainer.style.transform = 'translate(-50%, -50%)';
+    //     markerContainer.style.zIndex = '10';
+    //     markerContainer.style.pointerEvents = 'none';
+    //
+    //     const markerSize = isMobile ? 48 : isTablet ? 54 : 60;
+    //
+    //     const root = createRoot(markerContainer);
+    //     rootRef.current = root;
+    //
+    //     root.render(
+    //         <CustomMarker
+    //             color={markerColor}
+    //             pulse={false}
+    //             size={markerSize}
+    //         />
+    //     );
+    //
+    //     mapContainer.current.appendChild(markerContainer);
+    //     markerRef.current = markerContainer;
+    //
+    //     return () => {
+    //         if (markerRef.current) {
+    //             markerRef.current.remove();
+    //             markerRef.current = null;
+    //         }
+    //     };
+    // }, [mapReady, markerColor, isMobile, isTablet]);
 
-        // Удаляем старый маркер
-        if (markerRef.current) {
-            markerRef.current.remove();
-            markerRef.current = null;
-        }
-
-        if (rootRef.current) {
-            try {
-                rootRef.current.unmount();
-            } catch (e) {
-                console.error('Ошибка размонтирования маркера:', e);
-            }
-            rootRef.current = null;
-        }
-
-        // Создаем контейнер для маркера
-        const markerContainer = document.createElement('div');
-        markerContainer.style.position = 'absolute';
-        markerContainer.style.top = '50%';
-        markerContainer.style.left = '50%';
-        markerContainer.style.transform = 'translate(-50%, -50%)';
-        markerContainer.style.zIndex = '10';
-        markerContainer.style.pointerEvents = 'none';
-
-        const markerSize = isMobile ? 48 : isTablet ? 54 : 60;
-
-        const root = createRoot(markerContainer);
-        rootRef.current = root;
-
-        root.render(
-            <CustomMarker
-                color={markerColor}
-                pulse={false}
-                size={markerSize}
-            />
-        );
-
-        mapContainer.current.appendChild(markerContainer);
-        markerRef.current = markerContainer;
-
-        return () => {
-            if (markerRef.current) {
-                markerRef.current.remove();
-                markerRef.current = null;
-            }
-        };
-    }, [mapReady, markerColor, isMobile, isTablet]);
-
-    // Отрисовка электро станций
+    // Отрисовка электро станций для электро бибик
     useEffect(() => {
         if (!mapRef.current || !mapReady || !stations) return;
 
-        const map = mapRef.current
-        const data = getGeoJSON(stations);
+        const map = mapRef.current;
 
-        if (map.getSource('dot-stations')) {
-            (map.getSource('dot-stations') as maplibregl.GeoJSONSource).setData(data);
-            return;
-        }
 
-        map.addSource('dot-stations', {
-            type: 'geojson',
-            data,
+        stationsMarkersRef.current.forEach((m) => m.remove());
+        stationsMarkersRef.current = [];
+
+        stations.forEach((s) => {
+
+            const markerContainer = document.createElement('div');
+            markerContainer.style.pointerEvents = 'none'; // чтобы не мешал карте
+
+
+            const root = createRoot(markerContainer);
+            root.render(
+                <CustomMarkerAZS
+                    size={40}
+                    color="#0f0a2a"
+                    pulse={true}
+                />
+            );
+
+
+            const marker = new maplibregl.Marker({
+                element: markerContainer,
+                anchor: 'center',
+            })
+                .setLngLat([s.x, s.y])
+                .addTo(map);
+
+
+            stationsMarkersRef.current.push(marker);
         });
 
-        map.addLayer({
-            id:'dot-station-layer',
-            type:'circle',
-            source:'dot-stations',
-            paint:{
-                'circle-radius': 6,
-                'circle-color': '#00C853',
-            }
-        })
-
     }, [stations, mapReady]);
-
 
     const handleZoomIn = () => {
         if (mapRef.current) {
