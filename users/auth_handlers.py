@@ -26,10 +26,10 @@ async def login(response: Response, auth_data: SUserAuth) -> dict:
 
     token = await encode_token({'uid': user.id})
     response.set_cookie('access_token', token)
-    return {'ok': True,'uid': user.id, 'access_token': token}
+    return {'ok': True, 'uid': user.id, 'access_token': token}
 
 
-@router.post('logout')
+@router.post('/logout')
 async def logout(response: Response) -> dict:
     response.delete_cookie('access_token')
     return {'ok': True}
