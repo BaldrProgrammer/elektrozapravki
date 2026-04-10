@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response, HTTPException, status
 
 from users.dao import UserDAO
 from users.schemas import SUserReg, SUserAuth
-from users.auth import encode_token
+from users.auth import encode_token, verify_password
 
 router = APIRouter(prefix='/auth', tags=['/auth'])
 
@@ -16,8 +16,14 @@ async def register(user_instance: SUserReg) -> bool:
 
 
 @router.post('/login')
-async def login(response: Response, auth_data: SUserAuth) -> bool:
+async def login(response: Response, auth_data: SUserAuth) -> dict:
     user = await UserDAO.find_one_or_none(email=auth_data.email)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found.')
+
+    if not (await verify_password(auth_data.hashed_password, user.hashed_password)):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Password is incorrect')
+
     token = await encode_token({'uid': user.id})
     response.set_cookie('access_token', token)
-    return True
+    return {'uid': user.id, 'access_token': token}
