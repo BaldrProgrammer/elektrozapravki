@@ -8,10 +8,10 @@ router = APIRouter(prefix='/auth', tags=['/auth'])
 
 
 @router.post('/reg')
-async def register(user_instance: SUserReg) -> bool:
+async def register(user_instance: SUserReg) -> dict:
     if not await UserDAO.find_one_or_none(email=user_instance.email):
         await UserDAO.add(**user_instance.model_dump())
-        return True
+        return {'ok': True}
     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='User already exists.')
 
 
@@ -26,4 +26,10 @@ async def login(response: Response, auth_data: SUserAuth) -> dict:
 
     token = await encode_token({'uid': user.id})
     response.set_cookie('access_token', token)
-    return {'uid': user.id, 'access_token': token}
+    return {'ok': True,'uid': user.id, 'access_token': token}
+
+
+@router.post('logout')
+async def logout(response: Response) -> dict:
+    response.delete_cookie('access_token')
+    return {'ok': True}
