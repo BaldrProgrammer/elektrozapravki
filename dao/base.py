@@ -34,8 +34,8 @@ class BaseDAO:
             try:
                 new_instance = cls.model(**values)
                 session.add(new_instance)
-                session.commit()
+                await session.commit()
             except SQLAlchemyError as e:
-                session.rollback()
+                await session.rollback()
                 raise e
             return new_instance

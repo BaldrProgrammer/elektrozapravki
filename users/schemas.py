@@ -6,7 +6,9 @@ class SUserReg(BaseModel):
     hashed_password: str
     first_name: str
     last_name: str
-    profile_photo: str | None
+    profile_photo: str | None = Field(None)
+    cars: str = Field('[]')
+    favorite_stations: str = Field('[]')
 
 
 class SUserAuth(BaseModel):
