@@ -6,7 +6,7 @@ class SUserReg(BaseModel):
     hashed_password: str
     first_name: str
     last_name: str
-    profile_photo: str
+    profile_photo: str | None
 
 
 class SUserAuth(BaseModel):
@@ -20,6 +20,6 @@ class SUserGet(BaseModel):
     hashed_password: str
     first_name: str
     last_name: str
-    profile_photo: str
+    profile_photo: str | None
     cars: str
     favorite_stations: str
