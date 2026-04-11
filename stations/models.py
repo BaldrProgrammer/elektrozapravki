@@ -18,3 +18,14 @@ class StationModel(Base):
 
     def __repr__(self):
         return str(self)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'corpo': self.corpo,
+            'price': self.price,
+            'cords': self.cords,
+            'address': self.address,
+            'characteristics': self.characteristics
+        }
