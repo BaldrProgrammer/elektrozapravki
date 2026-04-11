@@ -65,7 +65,6 @@ const LoginForm: React.FC<ILoginFormProps> = ({ switchForm, handleClose }) => {
     // const userContext = useContext(UserContext);
     const router = useRouter();
 
-    // Фикс для SSR - читаем localStorage только на клиенте
     useEffect(() => {
         setInitialEmail(localStorage.getItem(STORAGE_KEY) || '');
     }, []);
@@ -125,7 +124,6 @@ const LoginForm: React.FC<ILoginFormProps> = ({ switchForm, handleClose }) => {
                             </Box>
 
                             <Form style={{ display: 'flex', flexDirection: 'column' }}>
-                                {/* Поле Email */}
                                 <Box sx={{ mb: 3 }}>
                                     <Field
                                         as={TextField}
@@ -147,7 +145,6 @@ const LoginForm: React.FC<ILoginFormProps> = ({ switchForm, handleClose }) => {
                                     />
                                 </Box>
 
-                                {/* Поле Пароль */}
                                 <Box sx={{ mb: 2 }}>
                                     <Field
                                         as={TextField}
@@ -186,7 +183,6 @@ const LoginForm: React.FC<ILoginFormProps> = ({ switchForm, handleClose }) => {
                                 </Box>
 
 
-                                {/* Кнопки в столбик */}
                                 <Box
                                     sx={{
                                         display: 'flex',

@@ -13,6 +13,7 @@ import CustomZoomButtons from '../Buttons/CustomZoomButtons';
 import { KALININGRAD_CENTER } from '@/utils/geo/geoUtils';
 import {IStations} from "@/types/MapType";
 import type {FeatureCollection, Point} from "geojson";
+import StationCard from "@/components/Card/StationCard";
 
 
 interface IActionMapProps {
@@ -23,6 +24,7 @@ interface IActionMapProps {
     interactive?: boolean;
 
     stations: IStations[];
+
 }
 
 const ActionMap: React.FC<IActionMapProps> = ({
@@ -45,6 +47,8 @@ const ActionMap: React.FC<IActionMapProps> = ({
     const [mapReady, setMapReady] = useState(false);
     const [mapError, setMapError] = useState<string | null>(null);
     const moveTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    const[selectStation, setSelectStation] = useState<IStations | null>(null);
 
     const getGeoJSON = useCallback((stations:IStations[]): FeatureCollection<Point> =>({
         type: 'FeatureCollection',
@@ -212,8 +216,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
         stations.forEach((s) => {
 
             const markerContainer = document.createElement('div');
-            markerContainer.style.pointerEvents = 'none'; // чтобы не мешал карте
-
+            markerContainer.style.cursor = 'pointer';
 
             const root = createRoot(markerContainer);
             root.render(
@@ -224,6 +227,10 @@ const ActionMap: React.FC<IActionMapProps> = ({
                 />
             );
 
+            markerContainer.onclick = (e) => {
+                e.stopPropagation();
+                setSelectStation(s);
+            };
 
             const marker = new maplibregl.Marker({
                 element: markerContainer,
@@ -237,6 +244,20 @@ const ActionMap: React.FC<IActionMapProps> = ({
         });
 
     }, [stations, mapReady]);
+
+    useEffect(() => {
+        if (!mapRef.current) return;
+
+        const handleMapClick = () => {
+            setSelectStation(null);
+        };
+
+        mapRef.current.on('click', handleMapClick);
+
+        return () => {
+            mapRef.current?.off('click', handleMapClick);
+        };
+    }, [mapReady]);
 
     const handleZoomIn = () => {
         if (mapRef.current) {
@@ -305,6 +326,26 @@ const ActionMap: React.FC<IActionMapProps> = ({
                     onZoomIn={handleZoomIn}
                     onZoomOut={handleZoomOut}
                 />
+            )}
+            {selectStation && (
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        bottom: 20,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 10,
+                        animation: 'fadeIn 0.3s ease',
+                    }}
+                >
+                    <StationCard
+                        vt={selectStation.power}
+                        price={selectStation.price}
+                        connector={selectStation.connector}
+                        address={selectStation.address}
+                        Net={selectStation.network}
+                    />
+                </Box>
             )}
         </Box>
     );

@@ -90,7 +90,7 @@ export const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
         MuiButton: {
             styleOverrides: {
                 root: {
-                    borderRadius: 999,
+                    borderRadius: 12,
                     padding: '10px 24px',
                     fontWeight: 600,
                     transition: 'all 0.3s ease',
@@ -102,7 +102,6 @@ export const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
 
                     '&:hover': {
                         boxShadow: `0 0 30px ${colors.primary}aa`,
-                        transform: 'translateY(-2px)',
                     },
                 },
 
