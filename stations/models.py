@@ -12,3 +12,9 @@ class StationModel(Base):
     cords: Mapped[str]
     address: Mapped[str]
     characteristics: Mapped[str]
+
+    def __str__(self):
+        return f'Station(id={self.id}, name="{self.name}", cords={self.cords})'
+
+    def __repr__(self):
+        return str(self)
