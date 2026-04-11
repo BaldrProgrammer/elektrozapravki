@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class SUserReg(BaseModel):
@@ -6,7 +6,9 @@ class SUserReg(BaseModel):
     hashed_password: str
     first_name: str
     last_name: str
-    profile_photo: str
+    profile_photo: str | None = Field(None)
+    cars: str = Field('[]')
+    favorite_stations: str = Field('[]')
 
 
 class SUserAuth(BaseModel):
@@ -20,6 +22,6 @@ class SUserGet(BaseModel):
     hashed_password: str
     first_name: str
     last_name: str
-    profile_photo: str
+    profile_photo: str | None
     cars: str
     favorite_stations: str

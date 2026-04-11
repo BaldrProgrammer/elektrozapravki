@@ -1,7 +1,6 @@
 """users add
 
 Revision ID: 338bad5aeb6c
-Revises: d442ec9dc54a
 Create Date: 2026-04-07 00:19:23.491643
 
 """
@@ -13,7 +12,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = '338bad5aeb6c'
-down_revision: Union[str, Sequence[str], None] = 'd442ec9dc54a'
+down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -28,6 +27,8 @@ def upgrade() -> None:
     sa.Column('first_name', sa.String(), nullable=False),
     sa.Column('last_name', sa.String(), nullable=False),
     sa.Column('profile_photo', sa.String(), nullable=False),
+    sa.Column('cars', sa.String(), nullable=False),
+    sa.Column('favorite_stations', sa.String(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.PrimaryKeyConstraint('id'),
