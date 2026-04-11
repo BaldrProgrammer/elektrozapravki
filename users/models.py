@@ -21,3 +21,15 @@ class UserModel(Base):
 
     def __repr__(self):
         return str(self)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'hashed_password': self.hashed_password,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'profile_photo': self.profile_photo,
+            'cars': self.cars,
+            'favorite_stations': self.favorite_stations
+        }
