@@ -45,4 +45,10 @@ export interface IStations {
     x: number,
     y: number,
     id: number,
+    power:number,
+    price:number,
+    connector:string,
+    address:string,
+    network:string,
 }
+
