@@ -1,20 +1,23 @@
 'use client'
 
 import React, { useState } from "react";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import InputSt from "@/components/Input/InputSt";
+import ButtonStation from "@/components/Buttons/ButtonStation";
+
 
 export default function DashBoard() {
     const [open, setOpen] = useState(false);
+    const theme = useTheme()
 
     return (
         <>
             <Box
                 sx={{
                     position: 'fixed',
-                    bottom: open ? 320 : 20,
+                    bottom: open ? 390 : 40,
                     left: '50%',
                     transform: 'translateX(-50%)',
                     zIndex: 1000,
@@ -25,9 +28,35 @@ export default function DashBoard() {
                     onClick={() => setOpen(prev => !prev)}
                     sx={{
                         backdropFilter: 'blur(10px)',
-                        background: 'rgba(255,255,255,0.1)',
+                        background: 'rgba(173,139,251,0.51)',
                         border: '1px solid rgba(255,255,255,0.2)',
-                        color: 'white',
+                        color: 'rgba(15,10,42,0.77)',
+                        transition: 'all 0.3s ease',
+
+
+                        animation: open ? '' : 'attention 2.5s infinite',
+
+                        '@keyframes attention': open ? '' : {
+                            '0%': {
+                                transform: 'translateY(0) scale(1)',
+                                background: 'rgba(173,139,251,0.51)',
+                            },
+                            '30%': {
+                                transform: 'translateY(-6px) scale(1.05)',
+                                background: 'rgba(173,139,251,0.62)',
+                            },
+                            '60%': {
+                                transform: 'translateY(0) scale(1)',
+                                background: 'rgba(173,139,251,0.8)',
+                            },
+                            '100%': {
+                                transform: 'translateY(0) scale(1)',
+                                background: 'rgba(173,139,251,0.66)',
+                            },
+                        },
+                        '&:hover': {
+                            transform: 'translateY(-4px) scale(1.08)',
+                        },
                     }}
                 >
                     {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
@@ -40,7 +69,7 @@ export default function DashBoard() {
                     bottom: 0,
                     left: 0,
                     width: '100%',
-                    height: 320,
+                    height: 380,
 
                     transform: open ? 'translateY(0)' : 'translateY(100%)',
                     transition: 'transform 0.35s ease',
@@ -48,7 +77,7 @@ export default function DashBoard() {
                     zIndex: 999,
 
                     backdropFilter: 'blur(20px)',
-                    background: 'rgba(15, 10, 42, 0.75)',
+                    background: theme.components?.MuiPaper,
                     borderTop: '1px solid rgba(173, 139, 251, 0.2)',
 
                     borderTopLeftRadius: '20px',
@@ -69,13 +98,31 @@ export default function DashBoard() {
                 />
 
                 <Typography variant="h6" sx={{ mb: 2 }}>
-                    Фильтры
+                    Поиск электростанции
                 </Typography>
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <InputSt placeholder="Какой процент заряда?" />
-                    <InputSt placeholder="Коннектор?" />
-                    <InputSt placeholder="Мощность" />
+                <Box sx={{ display: 'flex',
+                    justifyContent: 'start',
+                    width:'80%',
+                    m:'0 auto',
+                    p:2,
+                    height:180,
+                    gap: 2,
+                    background:'rgba(255,255,255,0.18)',
+                    border: `1px solid ${theme.palette.divider}`,
+                    borderRadius: 1,
+                }}>
+                    <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
+                        <InputSt label="Уровень заряда" sx={{width:250}}/>
+                        <InputSt label="Коннектор" sx={{width:250}}/>
+                    </Box>
+                    <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
+                        <InputSt label="Мощность" sx={{width:250}}/>
+                        <InputSt label="Запас хода" sx={{width:250}}/>
+                    </Box>
+                </Box>
+                <Box sx={{display: 'flex', justifyContent: 'center', width:'100%', mt: 2,}}>
+                    <ButtonStation>Найти станцию</ButtonStation>
                 </Box>
             </Box>
         </>

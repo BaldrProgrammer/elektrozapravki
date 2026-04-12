@@ -29,46 +29,37 @@ export default function InputSt({
             placeholder={placeholder}
             sx={{
                 '& .MuiOutlinedInput-root': {
-                    borderRadius: '14px',
-                    backgroundColor: theme.palette.background.paper,
-                    transition: 'all 0.25s ease',
-
-                    '& input': {
-                        padding: '12px 14px',
-                    },
+                    borderRadius: '16px',
+                    transition: 'all 0.2s ease',
+                    boxShadow:
+                        theme.palette.mode === 'dark'
+                            ? '0 0 6px rgba(248, 80, 10, 0.25)'
+                            : '0 0 4px rgba(248, 80, 10, 0.15)',
 
                     '& fieldset': {
-                        borderColor: theme.palette.divider,
+                        borderColor: theme.palette.primary.light,
                     },
 
                     '&:hover fieldset': {
                         borderColor: theme.palette.primary.main,
                     },
 
-                    '&.Mui-focused': {
-                        backgroundColor: theme.palette.background.paper,
-                        boxShadow: `0 0 0 2px ${theme.palette.primary.main}22`,
-                    },
-
                     '&.Mui-focused fieldset': {
                         borderColor: theme.palette.primary.main,
-                        borderWidth: '1px',
+                        borderWidth: '2px',
                     },
-                },
 
-                '& .MuiInputLabel-root': {
-                    color: theme.palette.text.secondary,
+                    '&.Mui-focused': {
+                        boxShadow:
+                            theme.palette.mode === 'dark'
+                                ? '0 0 12px rgba(248, 80, 10, 0.5)'
+                                : '0 0 8px rgba(248, 80, 10, 0.25)',
+                    },
                 },
 
                 '& .MuiInputLabel-root.Mui-focused': {
                     color: theme.palette.primary.main,
                 },
-
-                '& input::placeholder': {
-                    color: theme.palette.text.secondary,
-                    opacity: 0.7,
-                },
-
                 ...sx
             }}
         />
