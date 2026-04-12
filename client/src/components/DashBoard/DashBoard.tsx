@@ -6,18 +6,23 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import InputSt from "@/components/Input/InputSt";
 import ButtonStation from "@/components/Buttons/ButtonStation";
-
+import {useMediaQuery} from "@mui/material";
 
 export default function DashBoard() {
     const [open, setOpen] = useState(false);
     const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
     return (
         <>
             <Box
                 sx={{
                     position: 'fixed',
-                    bottom: open ? 390 : 40,
+                    bottom: open
+                        ? isMobile
+                            ? 20
+                            : 450
+                        : 40,
                     left: '50%',
                     transform: 'translateX(-50%)',
                     zIndex: 1000,
@@ -69,9 +74,15 @@ export default function DashBoard() {
                     bottom: 0,
                     left: 0,
                     width: '100%',
-                    height: 380,
 
-                    transform: open ? 'translateY(0)' : 'translateY(100%)',
+                    height: isMobile ? '100vh' : 440,
+
+                    transform: open
+                        ? 'translateY(0)'
+                        : isMobile
+                            ? 'translateY(100%)'
+                            : 'translateY(100%)',
+
                     transition: 'transform 0.35s ease',
 
                     zIndex: 999,
@@ -80,10 +91,12 @@ export default function DashBoard() {
                     background: theme.components?.MuiPaper,
                     borderTop: '1px solid rgba(173, 139, 251, 0.2)',
 
-                    borderTopLeftRadius: '20px',
-                    borderTopRightRadius: '20px',
+                    borderTopLeftRadius: isMobile ? 0 : '20px',
+                    borderTopRightRadius: isMobile ? 0 : '20px',
 
-                    p: 3,
+                    p: isMobile ? 2 : 3,
+
+                    overflowY: 'auto',
                 }}
             >
                 <Box
@@ -97,28 +110,29 @@ export default function DashBoard() {
                     }}
                 />
 
-                <Typography variant="h6" sx={{ mb: 2 }}>
+                <Typography variant="h3" sx={{ mb: 2, }}>
                     Поиск электростанции
                 </Typography>
 
                 <Box sx={{ display: 'flex',
-                    justifyContent: 'start',
+                    justifyContent:isMobile ? '':'start',
+                    flexDirection:isMobile ? 'column':'',
                     width:'80%',
                     m:'0 auto',
                     p:2,
-                    height:180,
+                    height:isMobile ? '40%' : 180,
                     gap: 2,
                     background:'rgba(255,255,255,0.18)',
                     border: `1px solid ${theme.palette.divider}`,
-                    borderRadius: 1,
+                    borderRadius: 2,
                 }}>
                     <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
-                        <InputSt label="Уровень заряда" sx={{width:250}}/>
-                        <InputSt label="Коннектор" sx={{width:250}}/>
+                        <InputSt label="Уровень заряда" sx={{width:250 , m: isMobile ? '0 auto':''}}/>
+                        <InputSt label="Коннектор" sx={{width:250 , m: isMobile ? '0 auto':''}}/>
                     </Box>
                     <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
-                        <InputSt label="Мощность" sx={{width:250}}/>
-                        <InputSt label="Запас хода" sx={{width:250}}/>
+                        <InputSt label="Мощность" sx={{width:250 , m: isMobile ? '0 auto':''}}/>
+                        <InputSt label="Запас хода" sx={{width:250 , m: isMobile ? '0 auto':''}}/>
                     </Box>
                 </Box>
                 <Box sx={{display: 'flex', justifyContent: 'center', width:'100%', mt: 2,}}>

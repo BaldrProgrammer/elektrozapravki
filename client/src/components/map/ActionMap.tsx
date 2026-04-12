@@ -40,6 +40,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
     const mapContainer = useRef<HTMLDivElement>(null);
+    // мапРеф это копия карты из библиотеки MapLibre GL JS
     const mapRef = useRef<maplibregl.Map | null>(null);
     const markerRef = useRef<HTMLDivElement | null>(null);
     const stationsMarkersRef = useRef<maplibregl.Marker[]>([]);
@@ -50,20 +51,8 @@ const ActionMap: React.FC<IActionMapProps> = ({
 
     const[selectStation, setSelectStation] = useState<IStations | null>(null);
 
+    const [cardPosition, setCardPosition] = useState<{ x: number; y: number } | null>(null);
 
-    const getGeoJSON = useCallback((stations:IStations[]): FeatureCollection<Point> =>({
-        type: 'FeatureCollection',
-        features: stations.map((s) => ({
-            type: 'Feature',
-            properties: {
-                id: s.id,
-            },
-            geometry: {
-                type: 'Point',
-                coordinates: [s.x, s.y],
-            },
-        })),
-    }), [])
 
 
     useEffect(() => {
@@ -153,59 +142,6 @@ const ActionMap: React.FC<IActionMapProps> = ({
         mapRef.current.setCenter(center);
     }, [center, mapReady]);
 
-    // Создание маркера (фиксированного в центре)
-    // useEffect(() => {
-    //     if (!mapContainer.current || !mapReady) return;
-    //
-    //     // Удаляем старый маркер
-    //     if (markerRef.current) {
-    //         markerRef.current.remove();
-    //         markerRef.current = null;
-    //     }
-    //
-    //     if (rootRef.current) {
-    //         try {
-    //             rootRef.current.unmount();
-    //         } catch (e) {
-    //             console.error('Ошибка размонтирования маркера:', e);
-    //         }
-    //         rootRef.current = null;
-    //     }
-    //
-    //     // Создаем контейнер для маркера
-    //     const markerContainer = document.createElement('div');
-    //     markerContainer.style.position = 'absolute';
-    //     markerContainer.style.top = '50%';
-    //     markerContainer.style.left = '50%';
-    //     markerContainer.style.transform = 'translate(-50%, -50%)';
-    //     markerContainer.style.zIndex = '10';
-    //     markerContainer.style.pointerEvents = 'none';
-    //
-    //     const markerSize = isMobile ? 48 : isTablet ? 54 : 60;
-    //
-    //     const root = createRoot(markerContainer);
-    //     rootRef.current = root;
-    //
-    //     root.render(
-    //         <CustomMarker
-    //             color={markerColor}
-    //             pulse={false}
-    //             size={markerSize}
-    //         />
-    //     );
-    //
-    //     mapContainer.current.appendChild(markerContainer);
-    //     markerRef.current = markerContainer;
-    //
-    //     return () => {
-    //         if (markerRef.current) {
-    //             markerRef.current.remove();
-    //             markerRef.current = null;
-    //         }
-    //     };
-    // }, [mapReady, markerColor, isMobile, isTablet]);
-
-    // Отрисовка электро станций для электро бибик
     useEffect(() => {
         if (!mapRef.current || !mapReady || !stations) return;
 
@@ -267,11 +203,39 @@ const ActionMap: React.FC<IActionMapProps> = ({
         }
     };
 
+    // шобы карточка рендорилась рядом с точкой
+    useEffect(() => {
+        if (!mapRef.current || !selectStation) return;
+
+        const updatePosition = () => {
+            const map = mapRef.current!;
+            const point = map.project([selectStation.x, selectStation.y]);
+
+            setCardPosition({
+                x: point.x,
+                y: point.y,
+            });
+        };
+
+        updatePosition();
+
+        // шобы карточка двигалась при зуме карты
+        mapRef.current.on('move', updatePosition);
+
+        return () => {
+            mapRef.current?.off('move', updatePosition);
+        };
+    }, [selectStation]);
+
     const handleZoomOut = () => {
         if (mapRef.current) {
             mapRef.current.zoomOut();
         }
     };
+
+    navigator.geolocation.watchPosition(position => {
+        const { latitude, longitude } = position.coords
+    })
 
     return (
         <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -329,14 +293,15 @@ const ActionMap: React.FC<IActionMapProps> = ({
                     onZoomOut={handleZoomOut}
                 />
             )}
-            {selectStation && (
+            {selectStation && cardPosition && (
                 <Box
                     sx={{
                         position: 'absolute',
-                        bottom: 20,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
+                        top: cardPosition.y,
+                        left: cardPosition.x,
+                        transform: 'translate(-50%, -120%)',
                         zIndex: 10,
+                        pointerEvents: 'auto',
                         animation: 'fadeIn 0.3s ease',
                     }}
                 >
