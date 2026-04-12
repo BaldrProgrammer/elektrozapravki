@@ -50,6 +50,8 @@ const ActionMap: React.FC<IActionMapProps> = ({
 
     const[selectStation, setSelectStation] = useState<IStations | null>(null);
 
+    const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+
     const getGeoJSON = useCallback((stations:IStations[]): FeatureCollection<Point> =>({
         type: 'FeatureCollection',
         features: stations.map((s) => ({
@@ -63,6 +65,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
             },
         })),
     }), [])
+
 
     useEffect(() => {
         if (!mapContainer.current || mapRef.current) return;

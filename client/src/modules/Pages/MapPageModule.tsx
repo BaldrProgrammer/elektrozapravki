@@ -1,5 +1,7 @@
 import ActionMap from "@/components/map/ActionMap";
 import {Box} from "@mui/material";
+import DashBoard from "@/components/DashBoard/DashBoard";
+
 
 const cordinate = [
     {id: 1, x:20.494614, y:54.709996, power:5, price:15, connector:'USB', address:'г.Калининград, ул. Красная', network:'Газпром'},
@@ -11,6 +13,7 @@ export default function MapPageModule() {
     return(
         <Box sx={{height:'94vh', width:'100%'}}>
             <ActionMap stations={cordinate}/>
+            <DashBoard/>
         </Box>
     )
 }
