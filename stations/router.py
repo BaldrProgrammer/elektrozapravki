@@ -12,6 +12,11 @@ async def get_all_stations() -> List[SStationGet]:
     return await StationsDAO.find_all()
 
 
+@router.get('/by_id')
+async def get_all_stations(user_id: int) -> SStationGet:
+    return await StationsDAO.find_one_or_none_by_id(user_id)
+
+
 @router.post('/add')
 async def add_station(new_instance: SStationAdd) -> dict:
     if await StationsDAO.find_all(name=new_instance.name):
