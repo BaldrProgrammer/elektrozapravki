@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
@@ -14,6 +13,7 @@ import { KALININGRAD_CENTER } from '@/utils/geo/geoUtils';
 import {IStations} from "@/types/MapType";
 import type {FeatureCollection, Point} from "geojson";
 import StationCard from "@/components/Card/StationCard";
+
 
 
 interface IActionMapProps {
@@ -233,9 +233,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
         }
     };
 
-    navigator.geolocation.watchPosition(position => {
-        const { latitude, longitude } = position.coords
-    })
+
 
     return (
         <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>

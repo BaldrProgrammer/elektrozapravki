@@ -9,7 +9,7 @@ import ButtonStation from "@/components/Buttons/ButtonStation";
 import {useMediaQuery} from "@mui/material";
 
 export default function DashBoard() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -75,7 +75,7 @@ export default function DashBoard() {
                     left: 0,
                     width: '100%',
 
-                    height: isMobile ? '100vh' : 440,
+                    height: isMobile ? '60vh' : 440,
 
                     transform: open
                         ? 'translateY(0)'
@@ -84,9 +84,7 @@ export default function DashBoard() {
                             : 'translateY(100%)',
 
                     transition: 'transform 0.35s ease',
-
                     zIndex: 999,
-
                     backdropFilter: 'blur(20px)',
                     background: theme.components?.MuiPaper,
                     borderTop: '1px solid rgba(173, 139, 251, 0.2)',
@@ -99,18 +97,7 @@ export default function DashBoard() {
                     overflowY: 'auto',
                 }}
             >
-                <Box
-                    sx={{
-                        width: 40,
-                        height: 4,
-                        borderRadius: 10,
-                        background: 'rgba(255,255,255,0.3)',
-                        mx: 'auto',
-                        mb: 2,
-                    }}
-                />
-
-                <Typography variant="h3" sx={{ mb: 2, }}>
+                <Typography variant="h3" sx={{ mb: 2, textAlign:'center'}}>
                     Поиск электростанции
                 </Typography>
 
@@ -120,14 +107,14 @@ export default function DashBoard() {
                     width:'80%',
                     m:'0 auto',
                     p:2,
-                    height:isMobile ? '40%' : 180,
+                    height:isMobile ? 310 : 180,
                     gap: 2,
                     background:'rgba(255,255,255,0.18)',
                     border: `1px solid ${theme.palette.divider}`,
                     borderRadius: 2,
                 }}>
                     <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
-                        <InputSt label="Уровень заряда" sx={{width:250 , m: isMobile ? '0 auto':''}}/>
+                        <InputSt label="Уровень заряда" sx={{width:250, m: isMobile ? '0 auto':''}}/>
                         <InputSt label="Коннектор" sx={{width:250 , m: isMobile ? '0 auto':''}}/>
                     </Box>
                     <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
@@ -136,7 +123,7 @@ export default function DashBoard() {
                     </Box>
                 </Box>
                 <Box sx={{display: 'flex', justifyContent: 'center', width:'100%', mt: 2,}}>
-                    <ButtonStation>Найти станцию</ButtonStation>
+                    <ButtonStation onClick={() => setOpen(prev => !prev)}>Найти станцию</ButtonStation>
                 </Box>
             </Box>
         </>

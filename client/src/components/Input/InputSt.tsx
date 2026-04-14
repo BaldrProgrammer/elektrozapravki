@@ -22,6 +22,7 @@ export default function InputSt({
     return (
         <TextField
             fullWidth
+            size="small"
             variant="outlined"
             label={label}
             value={value}
@@ -30,12 +31,19 @@ export default function InputSt({
             sx={{
                 '& .MuiOutlinedInput-root': {
                     borderRadius: '16px',
+                    height: '40px',
                     transition: 'all 0.2s ease',
                     boxShadow:
                         theme.palette.mode === 'dark'
                             ? '0 0 6px rgba(248, 80, 10, 0.25)'
                             : '0 0 4px rgba(248, 80, 10, 0.15)',
-
+                    '& input': {
+                        padding: '0 12px',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        boxSizing: 'border-box',
+                    },
                     '& fieldset': {
                         borderColor: theme.palette.primary.light,
                     },
