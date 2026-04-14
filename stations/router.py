@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 from stations.dao import StationsDAO
 from stations.schemas import SStationAdd, SStationGet
 
@@ -13,6 +13,8 @@ async def get_all_stations() -> List[SStationGet]:
 
 
 @router.post('/add')
-async def add_station(new_instance: SStationAdd) -> bool:
-    await StationsDAO.add(**new_instance.model_dump())
-    return True
+async def add_station(new_instance: SStationAdd) -> dict:
+    if await StationsDAO.find_all(name=new_instance.name):
+        await StationsDAO.add(**new_instance.model_dump())
+        return {'ok': True}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='user not found')
