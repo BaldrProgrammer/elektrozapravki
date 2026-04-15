@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Box, useTheme, useMediaQuery } from '@mui/material';
+import { Box, useTheme, useMediaQuery, IconButton } from '@mui/material';
+import MyLocationIcon from '@mui/icons-material/MyLocation'; // добавьте иконку
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibregl from 'maplibre-gl';
 import { createRoot } from 'react-dom/client';
@@ -9,11 +10,9 @@ import CustomMarker from './CustomMarker';
 import CustomMarkerAZS from "@/components/map/CustomMarkerAZS";
 import { osmConfig } from './osmConfig';
 import CustomZoomButtons from '../Buttons/CustomZoomButtons';
-import { KALININGRAD_CENTER } from '@/utils/geo/geoUtils';
-import {IStations} from "@/types/MapType";
+import { KALININGRAD_CENTER, getBrowserLocation } from '@/utils/geo/geoUtils';
+import { IStations } from "@/types/MapType";
 import StationCard from "@/components/Card/StationCard";
-
-
 
 interface IActionMapProps {
     center?: [number, number];
@@ -21,9 +20,8 @@ interface IActionMapProps {
     onMapLoad?: (map: maplibregl.Map) => void;
     markerColor?: string;
     interactive?: boolean;
-
     stations: IStations[];
-
+    showGeolocation?: boolean; // добавили
 }
 
 const ActionMap: React.FC<IActionMapProps> = ({
@@ -33,25 +31,21 @@ const ActionMap: React.FC<IActionMapProps> = ({
                                                   stations,
                                                   markerColor = '#1A1A1A',
                                                   interactive = true,
+                                                  showGeolocation = true, // по умолчанию показываем
                                               }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
     const mapContainer = useRef<HTMLDivElement>(null);
-    // мапРеф это копия карты из библиотеки MapLibre GL JS
     const mapRef = useRef<maplibregl.Map | null>(null);
-    const markerRef = useRef<HTMLDivElement | null>(null);
     const stationsMarkersRef = useRef<maplibregl.Marker[]>([]);
-    const rootRef = useRef<any>(null);
     const [mapReady, setMapReady] = useState(false);
     const [mapError, setMapError] = useState<string | null>(null);
     const moveTimeout = useRef<NodeJS.Timeout | null>(null);
-
-    const[selectStation, setSelectStation] = useState<IStations | null>(null);
-
+    const [selectStation, setSelectStation] = useState<IStations | null>(null);
     const [cardPosition, setCardPosition] = useState<{ x: number; y: number } | null>(null);
-
+    const [isLocating, setIsLocating] = useState(false);
 
 
     useEffect(() => {
@@ -82,12 +76,12 @@ const ActionMap: React.FC<IActionMapProps> = ({
             });
 
             map.on('error', (e) => {
-                console.error('🗺️ ActionMap - map error:', e);
+                console.error('ActionMap - map error:', e);
                 setMapError('Ошибка загрузки карты');
             });
 
         } catch (error) {
-            console.error('🗺️ ActionMap - error creating map:', error);
+            console.error('ActionMap - error creating map:', error);
             setMapError('Ошибка создания карты');
         }
 
@@ -232,7 +226,29 @@ const ActionMap: React.FC<IActionMapProps> = ({
         }
     };
 
+    const handleGeolocation = useCallback(async () => {
+        if (!mapRef.current || !mapReady) return;
 
+        setIsLocating(true);
+
+        try {
+            const position = await getBrowserLocation();
+            const { latitude, longitude } = position.coords;
+
+            mapRef.current.easeTo({
+                center: [longitude, latitude],
+                duration: 1000,
+                zoom: 15
+            });
+
+            console.log('Геолокация успешна:', { latitude, longitude });
+        } catch (error) {
+            console.error('Ошибка геолокации:', error);
+
+        } finally {
+            setIsLocating(false);
+        }
+    }, [mapReady]);
 
     return (
         <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -247,49 +263,42 @@ const ActionMap: React.FC<IActionMapProps> = ({
                     backgroundColor: '#f0f0f0',
                 }}
             />
-            {!mapReady && !mapError && (
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                        zIndex: 5,
-                    }}
-                >
-                    Загрузка карты...
-                </Box>
-            )}
-            {mapError && (
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        zIndex: 5,
-                        color: 'error.main',
-                    }}
-                >
-                    {mapError}
-                </Box>
-            )}
+
             {mapReady && interactive && (
                 <CustomZoomButtons
                     onZoomIn={handleZoomIn}
                     onZoomOut={handleZoomOut}
                 />
             )}
+
+            {/* Иконка с гео */}
+            {mapReady && showGeolocation && (
+                <IconButton
+                    onClick={handleGeolocation}
+                    disabled={isLocating}
+                    sx={{
+                        position: 'absolute',
+                        top: 66,
+                        right: 13,
+                        backgroundColor: 'white',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                        borderRadius: '50%',
+                        width: 48,
+                        height: 48,
+                        zIndex: 1000,
+                        '&:hover': {
+                            backgroundColor: '#f5f5f5',
+                        },
+                        '&:disabled': {
+                            backgroundColor: '#e0e0e0',
+                        }
+                    }}
+                >
+                    <MyLocationIcon sx={{ color: '#1A1A1A' }} />
+                </IconButton>
+            )}
+
+            {/* Карточка станции */}
             {selectStation && cardPosition && (
                 <Box
                     sx={{
