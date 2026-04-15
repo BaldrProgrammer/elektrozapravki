@@ -1,5 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.future import select
+from sqlalchemy import delete as sqlalchemy_delete
 
 from database import session_maker
 
@@ -39,3 +40,14 @@ class BaseDAO:
                 await session.rollback()
                 raise e
             return new_instance
+
+    @classmethod
+    async def remove(cls, **values):
+        async with session_maker() as session:
+            query = sqlalchemy_delete(cls.model).filter_by(**values)
+            await session.execute(query)
+            try:
+                await session.commit()
+            except SQLAlchemyError as e:
+                await session.rollback()
+                raise e

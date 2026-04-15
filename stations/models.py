@@ -8,7 +8,6 @@ class StationModel(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str]
     corpo: Mapped[str]
-    price: Mapped[int]
     cords: Mapped[str]
     address: Mapped[str]
     characteristics: Mapped[str]
