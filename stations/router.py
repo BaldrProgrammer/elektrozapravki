@@ -19,7 +19,7 @@ async def get_all_stations(user_id: int) -> SStationGet:
 
 
 @router.get('/get_nearest_station')
-async def get_nearest_station(lat: float, lon: float):
+async def get_nearest_station(lat: float, lon: float) -> SStationGet:
     stations = await StationsDAO.find_all()
     cords_dict = {}
     for station in stations:
