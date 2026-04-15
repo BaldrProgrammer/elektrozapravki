@@ -44,9 +44,10 @@ class BaseDAO:
     @classmethod
     async def remove(cls, **values):
         async with session_maker() as session:
+            query = sqlalchemy_delete(cls.model).filter_by(**values)
+            await session.execute(query)
             try:
-                query = sqlalchemy_delete(cls.model).filter_by(**values)
-                await session.execute(query)
+                await session.commit()
             except SQLAlchemyError as e:
                 await session.rollback()
                 raise e
