@@ -1,41 +1,46 @@
-'use client'
-import {useState, useEffect, useRef} from "react";
+'use client';
+
+import { useState, useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
-import {osmConfig} from "@/components/map/osmConfig";
+import { osmConfig } from "@/components/map/osmConfig";
 
+export default function useMap(center?: [number, number]) {
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
-export default function useMap(center?:[number, number]){
-    const mapRef = useRef<maplibregl.Map | null>(null)
-    const containerRef = useRef<HTMLDivElement>(null)
-
-    const [mapReady, setMapReady] = useState(false)
-    const [mapError, setMapError] = useState<string | null>(null)
+    const [map, setMap] = useState<maplibregl.Map | null>(null);
+    const [mapReady, setMapReady] = useState(false);
+    const [mapError, setMapError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!containerRef.current || !mapRef.current) return
+        if (!containerRef.current) return;
 
-        const map = new maplibregl.Map({
+        const m = new maplibregl.Map({
             container: containerRef.current,
             style: osmConfig.style,
-            center,
-            zoom:15,
+            center: center || [0, 0],
+            zoom: 15,
         });
 
-        mapRef.current = map
+        setMap(m);
 
-        map.on("load", () => setMapReady(true))
-        map.on('error', () => setMapError('Ошибка карты'))
+        m.on("load", () => {
+            setMapReady(true);
+        });
+
+        m.on("error", () => {
+            setMapError("Ошибка карты");
+        });
 
         return () => {
-            map.remove()
-            mapRef.current = null
+            m.remove();
+            setMap(null);
         };
-    }, []);
+    }, [center]);
 
-    return{
-        map: mapRef.current,
+    return {
+        map,
         containerRef,
         mapReady,
         mapError,
-    }
+    };
 }
