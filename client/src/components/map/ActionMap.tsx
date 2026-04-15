@@ -38,6 +38,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
     const mapContainer = useRef<HTMLDivElement>(null);
+    const geolocationMarkerRef = useRef<maplibregl.Marker | null>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
     const stationsMarkersRef = useRef<maplibregl.Marker[]>([]);
     const [mapReady, setMapReady] = useState(false);
@@ -226,6 +227,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
         }
     };
 
+    // функция с гео и еще отрисовывает маркер
     const handleGeolocation = useCallback(async () => {
         if (!mapRef.current || !mapReady) return;
 
@@ -241,10 +243,40 @@ const ActionMap: React.FC<IActionMapProps> = ({
                 zoom: 15
             });
 
+
+            if (geolocationMarkerRef.current) {
+                geolocationMarkerRef.current.remove();
+            }
+
+            const markerContainer = document.createElement('div');
+            markerContainer.style.cursor = 'pointer';
+            markerContainer.style.zIndex = '10';
+
+
+            const root = createRoot(markerContainer);
+            root.render(
+                <CustomMarker
+                    size={40}
+                    color="#221278"
+                />
+            );
+
+
+            const geolocationMarker = new maplibregl.Marker({
+                element: markerContainer,
+                anchor: 'center',
+            })
+                .setLngLat([longitude, latitude])
+                .addTo(mapRef.current);
+
+
+            geolocationMarkerRef.current = geolocationMarker;
+
             console.log('Геолокация успешна:', { latitude, longitude });
+
+
         } catch (error) {
             console.error('Ошибка геолокации:', error);
-
         } finally {
             setIsLocating(false);
         }
@@ -279,7 +311,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
                     sx={{
                         position: 'absolute',
                         top: 66,
-                        right: 13,
+                        right: 11,
                         backgroundColor: 'white',
                         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
                         borderRadius: '50%',
