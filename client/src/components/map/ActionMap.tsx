@@ -11,7 +11,6 @@ import { osmConfig } from './osmConfig';
 import CustomZoomButtons from '../Buttons/CustomZoomButtons';
 import { KALININGRAD_CENTER } from '@/utils/geo/geoUtils';
 import {IStations} from "@/types/MapType";
-import type {FeatureCollection, Point} from "geojson";
 import StationCard from "@/components/Card/StationCard";
 
 
