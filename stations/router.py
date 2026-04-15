@@ -19,7 +19,7 @@ async def get_all_stations(user_id: int) -> SStationGet:
 
 @router.post('/add')
 async def add_station(new_instance: SStationAdd) -> dict:
-    if await StationsDAO.find_all(name=new_instance.name):
+    if not await StationsDAO.find_all(name=new_instance.name):
         await StationsDAO.add(**new_instance.model_dump())
         return {'ok': True}
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='user not found')
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='station not found')
