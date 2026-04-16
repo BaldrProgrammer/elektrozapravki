@@ -26,9 +26,11 @@ export default function StationCard({
     return (
         <Box
             sx={{
-                width: 320,
+                width: '100%',
+                height:420,
                 p: 2,
-                borderRadius: 4,
+                borderTopLeftRadius: 32,
+                borderTopRightRadius: 32,
                 backdropFilter: 'blur(14px)',
                 background:
                     theme.palette.mode === 'dark'

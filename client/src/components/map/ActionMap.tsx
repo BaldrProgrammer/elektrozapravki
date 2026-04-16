@@ -45,7 +45,6 @@ const ActionMap: React.FC<IActionMapProps> = ({
     const [mapError, setMapError] = useState<string | null>(null);
     const moveTimeout = useRef<NodeJS.Timeout | null>(null);
     const [selectStation, setSelectStation] = useState<IStations | null>(null);
-    const [cardPosition, setCardPosition] = useState<{ x: number; y: number } | null>(null);
     const [isLocating, setIsLocating] = useState(false);
 
 
@@ -161,6 +160,17 @@ const ActionMap: React.FC<IActionMapProps> = ({
 
             markerContainer.onclick = (e) => {
                 e.stopPropagation();
+
+                if (mapRef.current) {
+                    mapRef.current.easeTo({
+                        center: [s.x, s.y],
+                        duration: 800,
+                        zoom: 15,
+
+                        offset: [0, -150],
+                    });
+                }
+
                 setSelectStation(s);
             };
 
@@ -197,29 +207,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
         }
     };
 
-    // шобы карточка рендорилась рядом с точкой
-    useEffect(() => {
-        if (!mapRef.current || !selectStation) return;
 
-        const updatePosition = () => {
-            const map = mapRef.current!;
-            const point = map.project([selectStation.x, selectStation.y]);
-
-            setCardPosition({
-                x: point.x,
-                y: point.y,
-            });
-        };
-
-        updatePosition();
-
-        // шобы карточка двигалась при зуме карты
-        mapRef.current.on('move', updatePosition);
-
-        return () => {
-            mapRef.current?.off('move', updatePosition);
-        };
-    }, [selectStation]);
 
     const handleZoomOut = () => {
         if (mapRef.current) {
@@ -330,26 +318,38 @@ const ActionMap: React.FC<IActionMapProps> = ({
                 </IconButton>
             )}
 
-            {/* Карточка станции */}
-            {selectStation && cardPosition && (
+
+            {selectStation && (
                 <Box
                     sx={{
                         position: 'absolute',
-                        top: cardPosition.y,
-                        left: cardPosition.x,
-                        transform: 'translate(-50%, -120%)',
-                        zIndex: 10,
-                        pointerEvents: 'auto',
-                        animation: 'fadeIn 0.3s ease',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        zIndex: 20,
+
+                        transform: selectStation ? 'translateY(0)' : 'translateY(100%)',
+                        transition: 'transform 0.3s ease',
+
+                        display: 'flex',
+                        justifyContent: 'center',
+                        pointerEvents: 'none',
+
+                        animation: 'slideUp 0.3s ease',
+
+                        '@keyframes slideUp': {
+                            from: { transform: 'translateY(40px)', opacity: 0 },
+                            to: { transform: 'translateY(0)', opacity: 1 },
+                        },
                     }}
                 >
-                    <StationCard
-                        vt={selectStation.power}
-                        price={selectStation.price}
-                        connector={selectStation.connector}
-                        address={selectStation.address}
-                        Net={selectStation.network}
-                    />
+                        <StationCard
+                            vt={selectStation.power}
+                            price={selectStation.price}
+                            connector={selectStation.connector}
+                            address={selectStation.address}
+                            Net={selectStation.network}
+                        />
                 </Box>
             )}
         </Box>
