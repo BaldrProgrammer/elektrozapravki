@@ -4,6 +4,8 @@ import { Box, Typography, Chip, Stack } from "@mui/material";
 import LikeButton from "@/components/Buttons/LikeButton";
 import ButtonRoad from "@/components/Buttons/ButtonRoad";
 import { useTheme } from "@mui/material";
+import ButtonRufuelCard from "@/components/Buttons/ButtonRufuelCard";
+
 
 interface IStationCard {
     vt: number;
@@ -60,6 +62,7 @@ export default function StationCard({
                 sx={{ justifyContent: 'space-between' }}
             >
                 <LikeButton />
+                <ButtonRufuelCard/>
                 <ButtonRoad />
             </Stack>
 
