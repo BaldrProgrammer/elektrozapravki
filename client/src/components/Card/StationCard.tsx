@@ -107,6 +107,12 @@ export default function StationCard({
                     }}
                 />
             </Box>
+            <Box>
+                <Typography variant="h6" sx={{ fontWeight: 600, textAlign:'center' }}>
+                    Подробнее
+                </Typography>
+
+            </Box>
         </Box>
     );
 }
