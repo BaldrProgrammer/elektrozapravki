@@ -5,6 +5,7 @@ from database import session_maker
 from stations.models import StationModel
 
 from sqlalchemy import update as sqlalchemy_update
+from sqlalchemy.exc import SQLAlchemyError
 
 
 class StationsDAO(BaseDAO):
@@ -13,11 +14,11 @@ class StationsDAO(BaseDAO):
     @classmethod
     async def rate_station(cls, sid, rate):
         station = (await StationsDAO.find_all(id=sid))[0]
-        print(station)
         async with session_maker() as session:
-            query = sqlalchemy_update(cls.model).filter_by(id=sid).values(overall_rate=station.overall_rate+rate)
+            query = sqlalchemy_update(cls.model).filter_by(id=sid).values(overall_rate=station.overall_rate+rate, people_rated=station.people_rated+1)
             await session.execute(query)
-            await session.commit()
-
-
-asyncio.run(StationsDAO.rate_station(5, 1))
+            try:
+                await session.commit()
+            except SQLAlchemyError as e:
+                await session.rollback()
+                raise e
