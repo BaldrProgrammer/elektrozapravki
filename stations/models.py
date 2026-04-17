@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from database import Base
 
+from typing import Any
+
 
 class StationModel(Base):
     __tablename__ = 'stations'
@@ -10,7 +12,7 @@ class StationModel(Base):
     corpo: Mapped[str]
     cords: Mapped[str]
     address: Mapped[str]
-    characteristics: Mapped[list]
+    characteristics: Mapped[list[Any]]
 
     def __str__(self):
         return f'Station(id={self.id}, name="{self.name}", cords={self.cords})'
@@ -23,7 +25,6 @@ class StationModel(Base):
             'id': self.id,
             'name': self.name,
             'corpo': self.corpo,
-            'price': self.price,
             'cords': self.cords,
             'address': self.address,
             'characteristics': self.characteristics
