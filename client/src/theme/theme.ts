@@ -125,7 +125,7 @@ export const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
                     backgroundColor:
                         mode === 'dark'
                             ? 'rgba(15, 10, 42, 0.7)'
-                            : '#ffffffcc',
+                            : 'rgba(255,255,255,0.95)',
                     border: `1px solid ${colors.dark.divider}`,
                 },
             },

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 
 from users.dao import UserDAO
 from users.models import UserModel
-from settings import get_token_data
+from settings import get_hash_data
 
 context = CryptContext(schemes=['bcrypt'])
 
@@ -23,12 +23,12 @@ async def encode_token(data: dict):
     to_encode = data.copy()
     delay = datetime.now(timezone.utc) + timedelta(days=14)
     to_encode.update({'exp': delay})
-    auth_data = get_token_data()
+    auth_data = get_hash_data()
     return jwt.encode(to_encode, auth_data['key'], auth_data['algorithm'])
 
 
 async def decode_token(token: str):
-    auth_data = get_token_data()
+    auth_data = get_hash_data()
     return jwt.decode(token, auth_data['key'])
 
 
