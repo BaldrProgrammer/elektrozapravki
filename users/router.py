@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
 from users.auth import get_current_user
-from users.schemas import SUserGet
 from typing import List
 
 from users.dao import UserDAO
@@ -20,5 +19,5 @@ async def get_all_users(user_id: int) -> SUserGet:
 
 
 @router.get('/current')
-async def get_current_user(user: SUserGet = Depends(get_all_users)):
+async def get_current_user(user: SUserGet = Depends(get_current_user)):
     return user
