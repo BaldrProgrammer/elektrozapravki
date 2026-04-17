@@ -39,6 +39,6 @@ async def get_current_user(request: Request) -> UserModel | None:
             return None
 
         uid = (await decode_token(token))['uid']
-        return await UserDAO.find_all(user_id=uid)
+        return await UserDAO.find_all(id=uid)
     except ExpiredSignatureError:
         return None
