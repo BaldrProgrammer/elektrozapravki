@@ -32,5 +32,12 @@ class StationModel(Base):
             'name': self.name,
             'cords': self.cords,
             'address': self.address,
+            'price': self.price,
+            'timezone': self.timezone,
+            'opening_hours': self.opening_hours,
+            'phone_numbers': self.phone_numbers,
+            'websites': self.websites,
+            'overall_rate': self.overall_rate,
+            'people_rated': self.people_rated,
             'characteristics': self.characteristics
         }
