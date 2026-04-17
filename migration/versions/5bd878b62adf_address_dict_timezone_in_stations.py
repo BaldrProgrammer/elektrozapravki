@@ -25,7 +25,8 @@ def upgrade() -> None:
     op.alter_column('stations', 'address',
                existing_type=sa.VARCHAR(),
                type_=sa.JSON(),
-               existing_nullable=False)
+               existing_nullable=False,
+               postgresql_using='address::json')
     # ### end Alembic commands ###
 
 
