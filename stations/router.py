@@ -35,4 +35,12 @@ async def add_station(new_instance: SStationAdd) -> dict:
     if not await StationsDAO.find_all(name=new_instance.name):
         await StationsDAO.add(**new_instance.model_dump())
         return {'ok': True}
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='station not found')
+    raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='station already exists')
+
+
+@router.post('/rate')
+async def add_station(sid: int, rate: int) -> dict:
+    if await StationsDAO.find_all(id=sid):
+        await StationsDAO.rate_station(sid, rate)
+        return {'ok': True}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='station does not exist')

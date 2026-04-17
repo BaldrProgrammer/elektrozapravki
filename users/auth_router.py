@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response, HTTPException, status
 
 from users.dao import UserDAO
 from users.schemas import SUserReg, SUserAuth
-from users.auth import encode_token, verify_password
+from users.auth import encode_token, get_hashed_password, verify_password
 
 router = APIRouter(prefix='/auth', tags=['/auth'])
 
@@ -10,6 +10,7 @@ router = APIRouter(prefix='/auth', tags=['/auth'])
 @router.post('/reg')
 async def register(user_instance: SUserReg) -> dict:
     if not await UserDAO.find_one_or_none(email=user_instance.email):
+        user_instance.hashed_password = await get_hashed_password(user_instance.hashed_password)
         await UserDAO.add(**user_instance.model_dump())
         return {'ok': True}
     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='User already exists.')

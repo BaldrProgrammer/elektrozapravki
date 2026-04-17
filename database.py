@@ -1,9 +1,9 @@
 from settings import get_database_url
 
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, Any
 
-from sqlalchemy import func
+from sqlalchemy import func, JSON
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs
 
@@ -17,5 +17,10 @@ updated_at = Annotated[datetime, mapped_column(server_default=func.now(), onupda
 
 
 class Base(AsyncAttrs, DeclarativeBase):
+    type_annotation_map = {
+        list[Any]: JSON,
+        dict: JSON
+    }
+
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
