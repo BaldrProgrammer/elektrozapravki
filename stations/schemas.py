@@ -1,17 +1,26 @@
 from pydantic import BaseModel, Field
 
+from typing import Any
+
 
 class SStationAdd(BaseModel):
     name: str
-    corpo: str
     cords: str
     address: str
-    characteristics: list = Field([])
+    price: int
+    opening_hours: str
+    phone_numbers: list[Any]
+    websites: list[Any]
+    characteristics: list[Any] = Field([])
 
 
 class SStationGet(BaseModel):
     name: str
-    corpo: str
     cords: str
     address: str
+    price: int
+    opening_hours: str
+    phone_numbers: list[Any]
+    websites: list[Any]
+    characteristics: list[Any]
     characteristics: list
