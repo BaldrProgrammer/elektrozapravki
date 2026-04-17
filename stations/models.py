@@ -9,9 +9,12 @@ class StationModel(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str]
-    corpo: Mapped[str]
     cords: Mapped[str]
     address: Mapped[str]
+    price: Mapped[int]
+    opening_hours: Mapped[str]
+    phone_numbers: Mapped[list[Any]]
+    websites: Mapped[list[Any]]
     characteristics: Mapped[list[Any]]
 
     def __str__(self):
@@ -24,7 +27,6 @@ class StationModel(Base):
         return {
             'id': self.id,
             'name': self.name,
-            'corpo': self.corpo,
             'cords': self.cords,
             'address': self.address,
             'characteristics': self.characteristics
