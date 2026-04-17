@@ -12,6 +12,8 @@ class SStationAdd(BaseModel):
     opening_hours: str
     phone_numbers: list[Any]
     websites: list[Any]
+    overall_rate: int = Field(0)
+    people_rated: int = Field(0)
     characteristics: list[Any] = Field([])
 
 
@@ -24,5 +26,6 @@ class SStationGet(BaseModel):
     opening_hours: str
     phone_numbers: list[Any]
     websites: list[Any]
+    overall_rate: int
+    people_rated: int
     characteristics: list[Any]
-    characteristics: list

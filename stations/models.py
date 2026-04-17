@@ -16,6 +16,8 @@ class StationModel(Base):
     opening_hours: Mapped[str]
     phone_numbers: Mapped[list[Any]]
     websites: Mapped[list[Any]]
+    overall_rate: Mapped[int]
+    people_rated: Mapped[int]
     characteristics: Mapped[list[Any]]
 
     def __str__(self):
