@@ -10,8 +10,9 @@ class StationModel(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str]
     cords: Mapped[str]
-    address: Mapped[str]
+    address: Mapped[dict]
     price: Mapped[int]
+    timezone: Mapped[str]
     opening_hours: Mapped[str]
     phone_numbers: Mapped[list[Any]]
     websites: Mapped[list[Any]]
