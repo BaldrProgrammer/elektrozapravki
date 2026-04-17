@@ -18,7 +18,8 @@ updated_at = Annotated[datetime, mapped_column(server_default=func.now(), onupda
 
 class Base(AsyncAttrs, DeclarativeBase):
     type_annotation_map = {
-        list[Any]: JSON
+        list[Any]: JSON,
+        dict: JSON
     }
 
     created_at: Mapped[created_at]
