@@ -6,7 +6,7 @@ class SStationAdd(BaseModel):
     corpo: str
     cords: str
     address: str
-    characteristics: str = Field("[]")
+    characteristics: list = Field([])
 
 
 class SStationGet(BaseModel):
@@ -14,4 +14,4 @@ class SStationGet(BaseModel):
     corpo: str
     cords: str
     address: str
-    characteristics: str
+    characteristics: list

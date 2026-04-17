@@ -10,7 +10,7 @@ class StationModel(Base):
     corpo: Mapped[str]
     cords: Mapped[str]
     address: Mapped[str]
-    characteristics: Mapped[str]
+    characteristics: Mapped[list]
 
     def __str__(self):
         return f'Station(id={self.id}, name="{self.name}", cords={self.cords})'
