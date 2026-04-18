@@ -5,14 +5,15 @@ import LikeButton from "@/components/Buttons/LikeButton";
 import ButtonRoad from "@/components/Buttons/ButtonRoad";
 import { useTheme } from "@mui/material";
 import ButtonRufuelCard from "@/components/Buttons/ButtonRufuelCard";
-
+import {IAdressType} from "@/types/StationsType";
 
 interface IStationCard {
     vt: number;
     price: number;
     connector: string;
-    address: string;
+    address: IAdressType;
     Net: string;
+
 }
 
 export default function StationCard({
@@ -52,7 +53,7 @@ export default function StationCard({
                     </Typography>
 
                     <Typography variant="body2" color="text.secondary" sx={{ textAlign:'center' }}>
-                        {address}
+                        {address.st}
                     </Typography>
             </Box>
 
@@ -111,6 +112,7 @@ export default function StationCard({
                 <Typography variant="h6" sx={{ fontWeight: 600, textAlign:'center' }}>
                     Подробнее
                 </Typography>
+
 
             </Box>
         </Box>
