@@ -61,10 +61,10 @@ export default function StationCard({
         >
 
             <Box>
-                <Typography variant="h4" sx={{ fontWeight: 600, textAlign: 'center', mb:2, }}>
+                <Typography variant="h4" sx={{ fontWeight: 600, textAlign: 'center', mb:1, }}>
                     {name || 'Электрозарядная станция'}
                 </Typography>
-                <Box>
+                <Box sx={{mb:2}}>
                     <ChipOpen opening_hours={opening_hours}/>
                 </Box>
                 <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>

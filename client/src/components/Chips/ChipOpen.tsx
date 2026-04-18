@@ -16,25 +16,25 @@ export default function ChipOpen({ opening_hours }: ChipsOpenProps) {
     return (
         <Box
             sx={{
-                width: 120,
-                height: 32,
+                width: 110,
+                height: 26,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 999,
 
-                color: 'rgb(26,18,64)',
+                color: 'rgba(26,18,64,0.85)',
                 fontSize: 13,
                 fontWeight: 600,
 
                 boxShadow: `
-          inset 0 0 20px #ad8bfb
-        `,
+              inset 0 0 20px #ad8bfb
+            `,
 
                 border: '2px solid transparent',
 
                 background: isOpen
-                    ? 'linear-gradient(#fff, #fff, #fff) padding-box, linear-gradient(to right, #ad8bfb, #f2eeff, #ad8bfb) border-box'
+                    ? 'linear-gradient(#fff, #fff, #fff) padding-box, linear-gradient(to right, #ad8bfb, #ad8bfb, #ad8bfb) border-box'
                     : 'linear-gradient(#fff, #fff, #fff) padding-box, linear-gradient(to right, #ffb4b4, #ff6b6b, #ffb4b4) border-box',
 
                 transition: '0.3s',
