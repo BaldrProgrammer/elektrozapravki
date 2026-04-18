@@ -62,3 +62,11 @@ async def rate_station(sid: int, rate: int) -> dict:
         await StationsDAO.rate_station(sid, rate)
         return {'ok': True}
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='station does not exist')
+
+
+@router.delete('/remove')
+async def remove_by_id(sid: int):
+    if await StationsDAO.find_all(id=sid):
+        await StationsDAO.remove(id=sid)
+        return {'ok': True}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='station does not exist')
