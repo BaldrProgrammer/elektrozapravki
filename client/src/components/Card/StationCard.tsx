@@ -41,11 +41,11 @@ export default function StationCard({
 
             <Box>
                     <Typography variant="h6" sx={{ fontWeight: 600, textAlign:'center' }}>
-                        {Net}
+
                     </Typography>
 
                     <Typography variant="body2" color="text.secondary" sx={{ textAlign:'center' }}>
-                        {address.st}
+
                     </Typography>
             </Box>
 
@@ -78,7 +78,7 @@ export default function StationCard({
                         Мощность
                     </Typography>
                     <Typography variant="body1" sx={{fontWeight:600}}>
-                        {vt} кВт
+                        {} кВт
                     </Typography>
                 </Box>
 
@@ -87,12 +87,12 @@ export default function StationCard({
                         Цена
                     </Typography>
                     <Typography variant="body1" sx={{fontWeight:600}}>
-                        {price} ₽
+                        {} ₽
                     </Typography>
                 </Box>
 
                 <Chip
-                    label={connector}
+                    label={}
                     sx={{
                         fontWeight: 600,
                         background: theme.palette.primary.main,
