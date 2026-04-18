@@ -7,6 +7,11 @@ export interface IAdressType {
     country: string
 }
 
+export interface ICharacteristics {
+    type: string,
+    kwt: number,
+    capacity: number,
+}
 
 
 
@@ -20,10 +25,5 @@ export interface IStation {
     opening_hours: string,
     phone_numbers: string[],
     websites:string[],
-    "characteristics": [
-    {
-        "type": "CCS Combo 2",
-        "kwt": 30,
-        "capacity": 1
-    }]
+    characteristics: ICharacteristics[],
 }
