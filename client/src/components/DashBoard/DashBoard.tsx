@@ -111,7 +111,6 @@ export default function DashBoard() {
                     height:isMobile ? 310 : 180,
                     gap: 2,
                     background:'rgba(255,255,255,0.18)',
-                    border: `1px solid ${theme.palette.divider}`,
                     borderRadius: 2,
                 }}>
                     <Box sx={{display:'flex', flexDirection:'column', gap:2}}>

@@ -1,6 +1,4 @@
-type OpeningHours = string;
-
-export function getShopStatus(openingHours: OpeningHours): "Открыто" | "Закрыто" {
+export function getShopStatus(openingHours: string): "Открыто" | "Закрыто" {
     const daysMap: Record<string, number> = {
         "Вс": 0,
         "Пн": 1,
@@ -15,22 +13,35 @@ export function getShopStatus(openingHours: OpeningHours): "Открыто" | "�
     const currentDay = now.getDay();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-    const rules = openingHours.split(";").map(item => item.trim());
+    if (!openingHours) return "Закрыто";
+
+    const rules = openingHours
+        .split(";")
+        .map(r => r.trim())
+        .filter(Boolean);
 
     for (const rule of rules) {
-        const [day, time] = rule.split(":").map(s => s.trim());
+        const parts = rule.split(":");
+
+        if (parts.length < 2) continue;
+
+        const day = parts[0].trim();
+        const time = parts.slice(1).join(":").trim();
+
         const dayIndex = daysMap[day];
+        if (dayIndex === undefined) continue;
 
         if (dayIndex !== currentDay) continue;
 
         const [start, end] = time.split("-");
+
+        if (!start || !end) continue;
 
         const [sh, sm] = start.split(":").map(Number);
         const [eh, em] = end.split(":").map(Number);
 
         const startMinutes = sh * 60 + sm;
         let endMinutes = eh * 60 + em;
-
 
         if (end === "24:00") {
             endMinutes = 24 * 60;

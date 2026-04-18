@@ -6,9 +6,9 @@ import ButtonRoad from "@/components/Buttons/ButtonRoad";
 import { useTheme } from "@mui/material";
 import ButtonRufuelCard from "@/components/Buttons/ButtonRufuelCard";
 import { IStation } from "@/types/StationsType";
-import { getOpenOrClose } from "@/utils/getOpeOrClose";
+import { getShopStatus } from "@/utils/getOpeOrClose";
 import {IAdressType} from "@/types/StationsType";
-import {ICharacteristics} from "@/types/StationsType";
+import ChipOpen from "@/components/Chips/ChipOpen";
 
 
 export default function StationCard({
@@ -24,7 +24,6 @@ export default function StationCard({
                                     }: IStation) {
 
     const theme = useTheme();
-    const availability = getOpenOrClose(opening_hours);
 
 
     const formatAddress = (addr: IAdressType): string => {
@@ -65,7 +64,9 @@ export default function StationCard({
                 <Typography variant="h4" sx={{ fontWeight: 600, textAlign: 'center', mb:2, }}>
                     {name || 'Электрозарядная станция'}
                 </Typography>
-
+                <Box>
+                    <ChipOpen opening_hours={opening_hours}/>
+                </Box>
                 <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
                     {formatAddress(address)}
                 </Typography>
@@ -73,7 +74,7 @@ export default function StationCard({
 
             <Stack
                 direction="row"
-                sx={{ justifyContent: 'space-between' }}
+                sx={{ justifyContent: 'space-between', mb:2 }}
             >
                 <LikeButton />
                 <ButtonRufuelCard />
@@ -123,12 +124,6 @@ export default function StationCard({
 
 
             <Box>
-                <Typography variant="h6" sx={{ fontWeight: 600, textAlign: 'center' }}>
-                    Режим работы
-                </Typography>
-                <Typography variant="body2" sx={{ textAlign: 'center', mt: 1 }}>
-                    {availability || opening_hours || 'Круглосуточно'}
-                </Typography>
 
                 {phone_numbers && phone_numbers.length > 0 && (
                     <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center', display: 'block', mt: 1 }}>
