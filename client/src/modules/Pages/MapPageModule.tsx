@@ -1,3 +1,5 @@
+"use client"
+
 import ActionMap from "@/components/map/ActionMap";
 import {Box} from "@mui/material";
 import DashBoard from "@/components/DashBoard/DashBoard";

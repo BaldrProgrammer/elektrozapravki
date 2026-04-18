@@ -233,8 +233,8 @@ export const areCoordinatesReasonable = (lat: number, lng: number): boolean => {
 
 // Координаты центра Калининграда
 export const KALININGRAD_CENTER = {
-    lat: 54.71,
-    lng: 20.51
+    lat: 56.85,
+    lng: 60.61
 };
 
 
