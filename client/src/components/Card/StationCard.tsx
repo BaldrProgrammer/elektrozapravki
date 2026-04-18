@@ -6,7 +6,6 @@ import ButtonRoad from "@/components/Buttons/ButtonRoad";
 import { useTheme } from "@mui/material";
 import ButtonRufuelCard from "@/components/Buttons/ButtonRufuelCard";
 import { IStation } from "@/types/StationsType";
-import { getShopStatus } from "@/utils/getOpeOrClose";
 import {IAdressType} from "@/types/StationsType";
 import ChipOpen from "@/components/Chips/ChipOpen";
 import ChipPhone from "@/components/Chips/ChipPhone";

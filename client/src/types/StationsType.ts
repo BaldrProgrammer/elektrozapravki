@@ -13,6 +13,11 @@ export interface ICharacteristics {
     capacity: number,
 }
 
+export interface IFiltres {
+    kwt:string,
+    type:string,
+}
+
 
 
 //////////////////////////////////////////////////////
@@ -30,7 +35,7 @@ export interface IStation {
 }
 
 export interface IStationNear {
-    cords: string,
-    kwt: number,
-    type: string,
+    lat: number | string;
+    lon: number | string;
+    filters: IFiltres
 }

@@ -1,61 +1,61 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Box, Switch, FormControlLabel, Typography, useTheme, useMediaQuery} from '@mui/material';
+import { Box, Switch, FormControlLabel, useTheme, useMediaQuery} from '@mui/material';
 import InputSt from "@/components/Input/InputSt";
 import ButtonStation from "@/components/Buttons/ButtonStation";
+import useNeareStation from "@/hooks/useNeareStation";
+import {IStationNear} from "@/types/StationsType";
+import {IFiltres} from "@/types/StationsType";
 
 interface StationSearchFormProps {
-    onSubmit?: (filters: SearchFilters) => void;
-    initialValues?: Partial<SearchFilters>;
+    onSubmit?: (filters: IStationNear) => void;
+    initialValues?: Partial<IStationNear>;
 }
 
-export interface SearchFilters {
-    chargeLevel: string;
-    connector: string;
-    power: string;
-    range: string;
-    lat: string;
-    lon: string;
-}
+
 
 export default function StationSearchForm({ onSubmit, initialValues }: StationSearchFormProps) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const [values, setValues] = useState({ lat: '', lon: '', filters: {} });
     const [useAutoGeo, setUseAutoGeo] = useState(true);
-    const [errors, setErrors] = useState<Partial<Record<keyof SearchFilters, string>>>({});
-    const [touched, setTouched] = useState<Partial<Record<keyof SearchFilters, boolean>>>({});
-
-    const [filters, setFilters] = useState<SearchFilters>({
-        chargeLevel: initialValues?.chargeLevel || '',
-        connector: initialValues?.connector || '',
-        power: initialValues?.power || '',
-        range: initialValues?.range || '',
+    const [errors, setErrors] = useState<Partial<Record<keyof IStationNear, string>>>({});
+    const [touched, setTouched] = useState<Partial<Record<keyof IStationNear, boolean>>>({});
+    const [filters, setFilters] = useState<IStationNear>({
         lat: initialValues?.lat || '',
         lon: initialValues?.lon || '',
+        filters:{
+            kwt:initialValues?.filters?.kwt || '',
+            type:initialValues?.filters?.type || ''
+        },
     });
 
-    const handleChange = (field: keyof SearchFilters) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setFilters(prev => ({ ...prev, [field]: value }));
-        if (errors[field]) {
-            setErrors(prev => ({ ...prev, [field]: '' }));
-        }
+
+    const handleChange = (field: keyof IStationNear | keyof IFiltres) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+
+        setValues(prev => {
+            // Если меняем lat или lon
+            if (field === 'lat' || field === 'lon') {
+                return { ...prev, [field]: value };
+            }
+            // Если меняем то, что внутри filters (kwt или type)
+            return {
+                ...prev,
+                filters: { ...prev.filters, [field]: value }
+            };
+        });
     };
 
-    const handleBlur = (field: keyof SearchFilters) => () => {
-        setTouched(prev => ({ ...prev, [field]: true }));
-        validateField(field, filters[field]);
-    };
+    const {setSend, station, error, loading} = useNeareStation(filters)
+    console.log(station, 'sdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdsdfsfdsfdsddfsdf')
 
-    const validateField = (field: keyof SearchFilters, value: string) => {
+
+    const validateField = (field: keyof IStationNear, value: string) => {
         let error = '';
-         if (field === 'chargeLevel' && (isNaN(Number(value)) || Number(value) < 0 || Number(value) > 100)) {
-            error = 'Введите число от 0 до 100';
-        } else if (field === 'connector' && value.trim().length < 2) {
+       if (field === 'type' && value.trim().length < 2) {
             error = 'Введите корректный тип коннектора';
-        } else if ((field === 'power' || field === 'range') && (isNaN(Number(value)) || Number(value) < 0)) {
-            error = 'Введите положительное число';
         } else if (field === 'lat' && (isNaN(Number(value)) || Math.abs(Number(value)) > 90)) {
             error = 'Широта от -90 до 90';
         } else if (field === 'lon' && (isNaN(Number(value)) || Math.abs(Number(value)) > 180)) {
@@ -68,12 +68,12 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
 
     const validateAll = (): boolean => {
         const fieldsToValidate = useAutoGeo
-            ? ['chargeLevel', 'connector', 'power', 'range']
-            : ['chargeLevel', 'connector', 'power', 'range', 'lat', 'lon'];
+            ? ['type', 'kwt']
+            : ['type', 'kwt','lat', 'lon'];
 
         let isValid = true;
         fieldsToValidate.forEach(field => {
-            const fieldKey = field as keyof SearchFilters;
+            const fieldKey = field as keyof IStationNear;
             const isFieldValid = validateField(fieldKey, filters[fieldKey]);
             if (!isFieldValid) isValid = false;
             setTouched(prev => ({ ...prev, [fieldKey]: true }));
@@ -85,9 +85,10 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
         if (validateAll()) {
             onSubmit?.(filters);
         }
+        setSend((prev)=>(!prev))
     };
 
-    const getFieldError = (field: keyof SearchFilters) => {
+    const getFieldError = (field: keyof IStationNear) => {
         return touched[field] && errors[field] ? errors[field] : '';
     };
 
@@ -111,11 +112,10 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <InputSt
                         label="Коннектор"
-                        value={filters.connector}
-                        onChange={handleChange('connector')}
-                        onBlur={handleBlur('connector')}
-                        error={!!getFieldError('connector')}
-                        helperText={getFieldError('connector')}
+                        value={filters.filters.type}
+                        onChange={handleChange('type')}
+                        error={!!getFieldError('type')}
+                        helperText={getFieldError('type')}
                         required
                         sx={{ width: 270, m: isMobile ? '0 auto' : '' }}
                     />
@@ -124,11 +124,10 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <InputSt
                         label="Мощность"
-                        value={filters.power}
-                        onChange={handleChange('power')}
-                        onBlur={handleBlur('power')}
-                        error={!!getFieldError('power')}
-                        helperText={getFieldError('power')}
+                        value={filters.filters.kwt}
+                        onChange={handleChange('kwt')}
+                        error={!!getFieldError('kwt')}
+                        helperText={getFieldError('kwt')}
                         required
                         sx={{ width: 270, m: isMobile ? '0 auto' : '' }}
                     />
@@ -162,7 +161,6 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
                             label="lat"
                             value={filters.lat}
                             onChange={handleChange('lat')}
-                            onBlur={handleBlur('lat')}
                             error={!!getFieldError('lat')}
                             helperText={getFieldError('lat')}
                             disabled={useAutoGeo}
@@ -173,7 +171,6 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
                             label="lon"
                             value={filters.lon}
                             onChange={handleChange('lon')}
-                            onBlur={handleBlur('lon')}
                             error={!!getFieldError('lon')}
                             helperText={getFieldError('lon')}
                             disabled={useAutoGeo}
