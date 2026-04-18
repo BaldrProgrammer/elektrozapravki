@@ -11,7 +11,7 @@ import CustomMarkerAZS from "@/components/map/CustomMarkerAZS";
 import { osmConfig } from './osmConfig';
 import CustomZoomButtons from '../Buttons/CustomZoomButtons';
 import { KALININGRAD_CENTER, getBrowserLocation } from '@/utils/geo/geoUtils';
-import { IStations } from "@/types/MapType";
+import {IStation} from "@/types/StationsType";
 import StationCard from "@/components/Card/StationCard";
 
 interface IActionMapProps {
@@ -20,15 +20,15 @@ interface IActionMapProps {
     onMapLoad?: (map: maplibregl.Map) => void;
     markerColor?: string;
     interactive?: boolean;
-    stations: IStations[];
-    showGeolocation?: boolean; // добавили
+    data: IStation[];
+    showGeolocation?: boolean;
 }
 
 const ActionMap: React.FC<IActionMapProps> = ({
                                                   center,
                                                   onMapMove,
                                                   onMapLoad,
-                                                  stations,
+                                                  data,
                                                   markerColor = '#1A1A1A',
                                                   interactive = true,
                                                   showGeolocation = true, // по умолчанию показываем
@@ -61,7 +61,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
                 zoom: 15,
                 maxZoom: osmConfig.maxZoom || 18,
                 minZoom: osmConfig.minZoom || 10,
-                attributionControl: osmConfig.attributionControl || false,
+                attributionControl: false,
                 interactive: interactive,
             });
 
@@ -136,7 +136,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
     }, [center, mapReady]);
 
     useEffect(() => {
-        if (!mapRef.current || !mapReady || !stations) return;
+        if (!mapRef.current || !mapReady || !data) return;
 
         const map = mapRef.current;
 
@@ -144,7 +144,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
         stationsMarkersRef.current.forEach((m) => m.remove());
         stationsMarkersRef.current = [];
 
-        stations.forEach((s) => {
+        data.forEach((s) => {
 
             const markerContainer = document.createElement('div');
             markerContainer.style.cursor = 'pointer';
@@ -185,7 +185,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
             stationsMarkersRef.current.push(marker);
         });
 
-    }, [stations, mapReady]);
+    }, [data, mapReady]);
 
     useEffect(() => {
         if (!mapRef.current) return;
@@ -291,7 +291,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
                 />
             )}
 
-            {/* Иконка с гео */}
+
             {mapReady && showGeolocation && (
                 <IconButton
                     onClick={handleGeolocation}
@@ -343,13 +343,17 @@ const ActionMap: React.FC<IActionMapProps> = ({
                         },
                     }}
                 >
-                        <StationCard
-                            vt={selectStation.power}
-                            price={selectStation.price}
-                            connector={selectStation.connector}
-                            address={selectStation.address}
-                            Net={selectStation.network}
-                        />
+                    <StationCard
+                        name={selectStation.name}
+                        price={selectStation.price}
+                        address={selectStation.address}
+                        opening_hours={selectStation.opening_hours}
+                        websites={selectStation.websites}
+                        characteristics={selectStation.characteristics}
+                        cords={selectStation.cords}
+                        timezone={selectStation.timezone}
+                        phone_numbers={selectStation.phone_numbers}
+                    />
                 </Box>
             )}
         </Box>
