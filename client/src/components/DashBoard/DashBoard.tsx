@@ -4,11 +4,8 @@ import React, { useState } from "react";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import InputSt from "@/components/Input/InputSt";
-import ButtonStation from "@/components/Buttons/ButtonStation";
 import {useMediaQuery} from "@mui/material";
-import {Button} from "@mui/material";
-
+import StationSearchForm from "@/components/Forms/StationSearchForm";
 
 export default function DashBoard() {
     const [open, setOpen] = useState(true);
@@ -102,29 +99,7 @@ export default function DashBoard() {
                     Поиск электростанции
                 </Typography>
 
-                <Box sx={{ display: 'flex',
-                    justifyContent:isMobile ? '':'start',
-                    flexDirection:isMobile ? 'column':'',
-                    width:'80%',
-                    m:'0 auto',
-                    p:2,
-                    height:isMobile ? 310 : 180,
-                    gap: 2,
-                    background:'rgba(255,255,255,0.18)',
-                    borderRadius: 2,
-                }}>
-                    <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
-                        <InputSt label="Уровень заряда" sx={{width:250, m: isMobile ? '0 auto':''}}/>
-                        <InputSt label="Коннектор" sx={{width:250 , m: isMobile ? '0 auto':''}}/>
-                    </Box>
-                    <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
-                        <InputSt label="Мощность" sx={{width:250 , m: isMobile ? '0 auto':''}}/>
-                        <InputSt label="Запас хода" sx={{width:250 , m: isMobile ? '0 auto':''}}/>
-                    </Box>
-                </Box>
-                <Box sx={{display: 'flex', justifyContent: 'center', width:'100%', mt: 2,}}>
-                    <ButtonStation onClick={() => setOpen(prev => !prev)}>Найти станцию</ButtonStation>
-                </Box>
+                <StationSearchForm/>
             </Box>
         </>
     );

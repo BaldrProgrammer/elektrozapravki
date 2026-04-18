@@ -2,7 +2,7 @@
 
 import {Box, Container} from "@mui/material";
 import NavBar from "@/components/NavBar/NavBar";
-import AuthBox from "@/components/AuthorizationForm/AuthBox";
+import AuthBox from "@/components/Forms/AuthorizationForm/AuthBox";
 
 
 export default function AuthPageModule(){

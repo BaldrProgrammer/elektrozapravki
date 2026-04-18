@@ -27,28 +27,5 @@ export interface IMapProviderProps {
     geoJsonData?: any;
 }
 
-export interface IMapProps extends IMapProviderProps {}
 
-export interface IActionsList {
-    id: string;
-    theme: ActionTheme;
-    date: Date;
-    coordinates: [number, number];
-}
-
-export interface IMarkerRootInfo {
-    root: any;
-    el: HTMLElement;
-}
-
-export interface IStations {
-    x: number,
-    y: number,
-    id: number,
-    power:number,
-    price:number,
-    connector:string,
-    address:string,
-    network:string,
-}
 

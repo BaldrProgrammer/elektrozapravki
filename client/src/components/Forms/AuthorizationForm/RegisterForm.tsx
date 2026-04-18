@@ -8,7 +8,7 @@ import { TextField, Box, Typography, Paper, useTheme } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import * as Yup from 'yup';
-import ButtonStation from '../Buttons/ButtonStation';
+import ButtonStation from '../../Buttons/ButtonStation';
 
 interface IRegisterFormProps {
     switchForm: (shouldRegister: boolean) => void;
