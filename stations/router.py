@@ -27,7 +27,7 @@ async def get_nearest_station(lat: float, lon: float) -> SStationGet:
         km = await get_distance_km(float(cord[0]), float(cord[1]), lat, lon)
         cords_dict[km] = station.cords
     cords_sorted = sorted(cords_dict)
-    return await StationsDAO.find_all(cords=cords_dict[cords_sorted[0]])
+    return (await StationsDAO.find_all(cords=cords_dict[cords_sorted[0]]))[0]
 
 
 @router.post('/add')
@@ -38,7 +38,7 @@ async def add_station(new_instance: SStationAdd) -> dict:
     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='station already exists')
 
 
-@router.put('/rate')
+@router.patch('/rate')
 async def rate_station(sid: int, rate: int) -> dict:
     if await StationsDAO.find_all(id=sid):
         await StationsDAO.rate_station(sid, rate)
