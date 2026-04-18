@@ -22,12 +22,39 @@ async def get_all_stations(user_id: int) -> SStationGet:
 
 @router.get('/by_filters')
 async def get_all_stations(filters) -> List[SStationGet]:
-    return await StationsDAO.find_all(**json.loads(filters))
+    try:
+        return await StationsDAO.find_all(**json.loads(filters))
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid JSON syntax')
+
+
+@router.get('/by_characteristics')
+async def get_all_stations(filters) -> List[SStationGet]:
+    try:
+        return await StationsDAO.find_all_by_characteristics(json.loads(filters))
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid JSON syntax')
 
 
 @router.get('/get_nearest_station')
 async def get_nearest_station(lat: float, lon: float) -> SStationGet:
     stations = await StationsDAO.find_all()
+    cords_dict = {}
+    for station in stations:
+        cord = station.cords.split(' ')
+        km = await get_distance_km(float(cord[0]), float(cord[1]), lat, lon)
+        cords_dict[km] = station.cords
+    cords_sorted = sorted(cords_dict)
+    return (await StationsDAO.find_all(cords=cords_dict[cords_sorted[0]]))[0]
+
+
+@router.get('/get_thebest_station')
+async def get_nearest_station(filters, lat: float, lon: float) -> SStationGet:
+    try:
+        stations = await StationsDAO.find_all_by_characteristics(json.loads(filters))
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid JSON syntax')
+
     cords_dict = {}
     for station in stations:
         cord = station.cords.split(' ')
@@ -49,5 +76,13 @@ async def add_station(new_instance: SStationAdd) -> dict:
 async def rate_station(sid: int, rate: int) -> dict:
     if await StationsDAO.find_all(id=sid):
         await StationsDAO.rate_station(sid, rate)
+        return {'ok': True}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='station does not exist')
+
+
+@router.delete('/remove')
+async def remove_by_id(sid: int):
+    if await StationsDAO.find_all(id=sid):
+        await StationsDAO.remove(id=sid)
         return {'ok': True}
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='station does not exist')
