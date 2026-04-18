@@ -13,11 +13,7 @@ interface IStationCard {
 }
 
 export default function StationCard({
-                                        vt,
-                                        price,
-                                        connector,
-                                        address,
-                                        Net,
+
                                     }: IStationCard) {
     const theme = useTheme();
 
