@@ -5,18 +5,15 @@ import LikeButton from "@/components/Buttons/LikeButton";
 import ButtonRoad from "@/components/Buttons/ButtonRoad";
 import { useTheme } from "@mui/material";
 import ButtonRufuelCard from "@/components/Buttons/ButtonRufuelCard";
-import {IAdressType} from "@/types/StationsType";
+import {IStation} from "@/types/StationsType";
+import {getOpenOrClose} from "@/utils/getOpeOrClose";
 
-interface IStationCard {
 
 
-}
+export default function StationCard({name, price, address, timezone}: IStation) {
 
-export default function StationCard({
-
-                                    }: IStationCard) {
-    const theme = useTheme();
-
+    const theme = useTheme()
+    const availability = getOpenOrClose(timezone)
 
     return (
         <Box
@@ -104,7 +101,7 @@ export default function StationCard({
                 <Typography variant="h6" sx={{ fontWeight: 600, textAlign:'center' }}>
                     Подробнее
                 </Typography>
-
+                {availability}
 
             </Box>
         </Box>
