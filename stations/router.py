@@ -25,6 +25,11 @@ async def get_all_stations(filters) -> List[SStationGet]:
     return await StationsDAO.find_all(**json.loads(filters))
 
 
+@router.get('/by_characteristics')
+async def get_all_stations(filters) -> List[SStationGet]:
+    return await StationsDAO.find_all_by_characteristics(json.loads(filters))
+
+
 @router.get('/get_nearest_station')
 async def get_nearest_station(lat: float, lon: float) -> SStationGet:
     stations = await StationsDAO.find_all()
