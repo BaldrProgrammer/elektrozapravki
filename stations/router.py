@@ -38,8 +38,8 @@ async def add_station(new_instance: SStationAdd) -> dict:
     raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='station already exists')
 
 
-@router.post('/rate')
-async def add_station(sid: int, rate: int) -> dict:
+@router.put('/rate')
+async def rate_station(sid: int, rate: int) -> dict:
     if await StationsDAO.find_all(id=sid):
         await StationsDAO.rate_station(sid, rate)
         return {'ok': True}
