@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter, HTTPException, status
 from funcs import get_distance_km
 from stations.dao import StationsDAO
@@ -16,6 +18,11 @@ async def get_all_stations() -> List[SStationGet]:
 @router.get('/by_id')
 async def get_all_stations(user_id: int) -> SStationGet:
     return await StationsDAO.find_one_or_none_by_id(user_id)
+
+
+@router.get('/by_filters')
+async def get_all_stations(filters) -> List[SStationGet]:
+    return await StationsDAO.find_all(**json.loads(filters))
 
 
 @router.get('/get_nearest_station')
