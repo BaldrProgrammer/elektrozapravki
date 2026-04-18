@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Box, useTheme, useMediaQuery } from '@mui/material';
+import { Box, Switch, FormControlLabel, Typography, useTheme, useMediaQuery } from '@mui/material';
 import InputSt from "@/components/Input/InputSt";
 import ButtonStation from "@/components/Buttons/ButtonStation";
 
@@ -20,6 +20,7 @@ export interface SearchFilters {
 export default function StationSearchForm({ onSubmit, initialValues }: StationSearchFormProps) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const [useAutoGeo, setUseAutoGeo] = useState(true);
 
     const [filters, setFilters] = useState<SearchFilters>({
         chargeLevel: initialValues?.chargeLevel || '',
@@ -57,13 +58,13 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
                         label="Уровень заряда"
                         value={filters.chargeLevel}
                         onChange={(e) => handleChange('chargeLevel')(e.target.value)}
-                        sx={{ width: 250, m: isMobile ? '0 auto' : '' }}
+                        sx={{ width: 270, m: isMobile ? '0 auto' : '' }}
                     />
                     <InputSt
                         label="Коннектор"
                         value={filters.connector}
                         onChange={(e) => handleChange('connector')(e.target.value)}
-                        sx={{ width: 250, m: isMobile ? '0 auto' : '' }}
+                        sx={{ width: 270, m: isMobile ? '0 auto' : '' }}
                     />
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -71,14 +72,43 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
                         label="Мощность"
                         value={filters.power}
                         onChange={(e) => handleChange('power')(e.target.value)}
-                        sx={{ width: 250, m: isMobile ? '0 auto' : '' }}
+                        sx={{ width: 270, m: isMobile ? '0 auto' : '' }}
                     />
                     <InputSt
                         label="Запас хода"
                         value={filters.range}
                         onChange={(e) => handleChange('range')(e.target.value)}
-                        sx={{ width: 250, m: isMobile ? '0 auto' : '' }}
+                        sx={{ width: 270, m: isMobile ? '0 auto' : '' }}
                     />
+                </Box>
+                <Box sx={{display:'flex'}}>
+                    <Box sx={{ mb: 1 }}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={useAutoGeo}
+                                    onChange={(e) => setUseAutoGeo(e.target.checked)}
+                                    sx={{
+                                        '& .MuiSwitch-switchBase.Mui-checked': {
+                                            color: theme.palette.primary.main,
+                                        },
+                                    }}
+                                />
+                            }
+                            label="Авто геолокация"
+                        />
+                    </Box>
+
+                    <Box>
+                        <InputSt
+                            label="lat"
+                            sx={{ width: 100 }}
+                        />
+                        <InputSt
+                            label="lon"
+                            sx={{ width: 100 }}
+                        />
+                    </Box>
                 </Box>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 2 }}>
