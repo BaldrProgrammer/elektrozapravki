@@ -1,5 +1,3 @@
-import asyncio
-
 from dao.base import BaseDAO
 from database import session_maker
 from stations.models import StationModel
@@ -22,8 +20,11 @@ class StationsDAO(BaseDAO):
             for station in stations:
                 characteristics = station.characteristics
                 for characteristic in characteristics:
-                    if any(filters.get(k) == v for k, v in characteristic.items()):
-                        print(True)
+                    if all(characteristic.get(k) == v for k, v in filters.items()):
+                        result.append(station)
+                        break
+
+            return result
 
     @classmethod
     async def rate_station(cls, sid, rate):
@@ -37,6 +38,3 @@ class StationsDAO(BaseDAO):
             except SQLAlchemyError as e:
                 await session.rollback()
                 raise e
-
-
-print(asyncio.run(StationsDAO.find_all_by_characteristics({})))
