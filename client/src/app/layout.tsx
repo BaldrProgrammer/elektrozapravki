@@ -28,9 +28,9 @@ export default function RootLayout({
         </head>
         <body className={inter.className} suppressHydrationWarning>
         <ThemeContextProvider>
-            <Container maxWidth="xxl" sx={{ mt: 3 }}>
+
                 {children}
-            </Container>
+
         </ThemeContextProvider>
         </body>
         </html>

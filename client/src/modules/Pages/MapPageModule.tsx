@@ -11,7 +11,7 @@ export default function MapPageModule() {
     const {loading, error, data} = useActionStation()
 
     return(
-        <Box sx={{height:'94vh', width:'100%'}}>
+        <Box sx={{height:'100vh', width:'100%'}}>
             <ActionMap data={data}/>
             <DashBoard/>
         </Box>

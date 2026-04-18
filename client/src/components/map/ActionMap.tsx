@@ -281,7 +281,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
                 sx={{
                     width: '100%',
                     height: '100%',
-                    borderRadius: { xs: '24px', sm: '28px', md: '32px' },
+
                     overflow: 'hidden',
                     position: 'relative',
                     backgroundColor: '#f0f0f0',
