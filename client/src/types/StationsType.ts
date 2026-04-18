@@ -25,5 +25,5 @@ export interface IStation {
     opening_hours: string,
     phone_numbers: string[],
     websites:string[],
-    characteristics: ICharacteristics,
+    characteristics: ICharacteristics[],
 }

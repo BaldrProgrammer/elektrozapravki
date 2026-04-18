@@ -325,6 +325,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
 
             {selectStation && (
                 <Box
+                    onClick={(e) => e.stopPropagation()}
                     sx={{
                         position: 'absolute',
                         bottom: 0,
@@ -337,7 +338,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
 
                         display: 'flex',
                         justifyContent: 'center',
-                        pointerEvents: 'none',
+                        pointerEvents: 'auto',
 
                         animation: 'slideUp 0.3s ease',
 

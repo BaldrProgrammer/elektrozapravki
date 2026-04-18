@@ -8,6 +8,8 @@ import ButtonRufuelCard from "@/components/Buttons/ButtonRufuelCard";
 import { IStation } from "@/types/StationsType";
 import { getOpenOrClose } from "@/utils/getOpeOrClose";
 import {IAdressType} from "@/types/StationsType";
+import {ICharacteristics} from "@/types/StationsType";
+
 
 export default function StationCard({
                                         name,
@@ -96,7 +98,7 @@ export default function StationCard({
                         Мощность
                     </Typography>
                     <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                        {characteristics?.kwt || characteristics?.capacity || '—'} кВт
+                        {characteristics?.[0]?.kwt || '—'} кВт
                     </Typography>
                 </Box>
 
@@ -110,7 +112,7 @@ export default function StationCard({
                 </Box>
 
                 <Chip
-                    label={characteristics?.type || 'Стандарт'}
+                    label={characteristics?.[0]?.type || 'Стандарт'}
                     sx={{
                         fontWeight: 600,
                         background: theme.palette.primary.main,
