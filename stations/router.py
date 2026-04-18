@@ -48,6 +48,22 @@ async def get_nearest_station(lat: float, lon: float) -> SStationGet:
     return (await StationsDAO.find_all(cords=cords_dict[cords_sorted[0]]))[0]
 
 
+@router.get('/get_thebest_station')
+async def get_nearest_station(filters, lat: float, lon: float) -> SStationGet:
+    try:
+        stations = await StationsDAO.find_all_by_characteristics(json.loads(filters))
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid JSON syntax')
+
+    cords_dict = {}
+    for station in stations:
+        cord = station.cords.split(' ')
+        km = await get_distance_km(float(cord[0]), float(cord[1]), lat, lon)
+        cords_dict[km] = station.cords
+    cords_sorted = sorted(cords_dict)
+    return (await StationsDAO.find_all(cords=cords_dict[cords_sorted[0]]))[0]
+
+
 @router.post('/add')
 async def add_station(new_instance: SStationAdd) -> dict:
     if not await StationsDAO.find_all(name=new_instance.name):
