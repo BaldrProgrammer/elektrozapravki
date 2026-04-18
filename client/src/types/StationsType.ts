@@ -17,6 +17,7 @@ export interface ICharacteristics {
 
 //////////////////////////////////////////////////////
 export interface IStation {
+    id:number,
     name: string,
     cords: string,
     address: IAdressType,
@@ -26,4 +27,10 @@ export interface IStation {
     phone_numbers: string[],
     websites:string[],
     characteristics: ICharacteristics[],
+}
+
+export interface IStationNear {
+    cords: string,
+    kwt: number,
+    type: string,
 }

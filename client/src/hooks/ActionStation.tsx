@@ -14,7 +14,7 @@ export default function useActionStation() {
                 setLoading(true);
                 setError(null);
 
-                const response = await fetch('http://155.212.210.60:8000/stations/all');
+                const response = await fetch('http://127.0.0.1:8000/stations/all');
 
                 if (!response.ok) {
                     throw new Error(`Шота не то! status: ${response.status}`);
