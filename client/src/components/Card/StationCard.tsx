@@ -9,7 +9,7 @@ import { IStation } from "@/types/StationsType";
 import { getShopStatus } from "@/utils/getOpeOrClose";
 import {IAdressType} from "@/types/StationsType";
 import ChipOpen from "@/components/Chips/ChipOpen";
-
+import ChipPhone from "@/components/Chips/ChipPhone";
 
 export default function StationCard({
                                         name,
@@ -64,8 +64,9 @@ export default function StationCard({
                 <Typography variant="h4" sx={{ fontWeight: 600, textAlign: 'center', mb:1, }}>
                     {name || 'Электрозарядная станция'}
                 </Typography>
-                <Box sx={{mb:2}}>
+                <Box sx={{mb:2, display:'flex', gap:1}}>
                     <ChipOpen opening_hours={opening_hours}/>
+                    <ChipPhone phone_numbers={phone_numbers}/>
                 </Box>
                 <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
                     {formatAddress(address)}
@@ -122,15 +123,6 @@ export default function StationCard({
                 />
             </Box>
 
-
-            <Box>
-
-                {phone_numbers && phone_numbers.length > 0 && (
-                    <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center', display: 'block', mt: 1 }}>
-                        {phone_numbers[0]}
-                    </Typography>
-                )}
-            </Box>
         </Box>
     );
 }
