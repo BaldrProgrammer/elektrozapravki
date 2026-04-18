@@ -16,12 +16,12 @@ async def get_all_stations() -> List[SStationGet]:
 
 
 @router.get('/by_id')
-async def get_all_stations(user_id: int) -> SStationGet:
+async def get_all_by_id(user_id: int) -> SStationGet:
     return await StationsDAO.find_one_or_none_by_id(user_id)
 
 
 @router.get('/by_filters')
-async def get_all_stations(filters) -> List[SStationGet]:
+async def get_all_by_filters(filters) -> List[SStationGet]:
     try:
         return await StationsDAO.find_all(**json.loads(filters))
     except json.JSONDecodeError:
@@ -29,7 +29,7 @@ async def get_all_stations(filters) -> List[SStationGet]:
 
 
 @router.get('/by_characteristics')
-async def get_all_stations(filters) -> List[SStationGet]:
+async def get_all_by_characteristics(filters) -> List[SStationGet]:
     try:
         return await StationsDAO.find_all_by_characteristics(json.loads(filters))
     except json.JSONDecodeError:
@@ -49,7 +49,7 @@ async def get_nearest_station(lat: float, lon: float) -> SStationGet:
 
 
 @router.get('/get_thebest_station')
-async def get_nearest_station(filters, lat: float, lon: float) -> SStationGet:
+async def get_thebest_station(filters, lat: float, lon: float) -> SStationGet:
     try:
         stations = await StationsDAO.find_all_by_characteristics(json.loads(filters))
     except json.JSONDecodeError:
