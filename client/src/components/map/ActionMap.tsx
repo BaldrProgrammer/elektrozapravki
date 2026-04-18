@@ -13,6 +13,8 @@ import CustomZoomButtons from '../Buttons/CustomZoomButtons';
 import { KALININGRAD_CENTER, getBrowserLocation } from '@/utils/geo/geoUtils';
 import {IStation} from "@/types/StationsType";
 import StationCard from "@/components/Card/StationCard";
+import getCords from "@/utils/getCords";
+
 
 interface IActionMapProps {
     center?: [number, number];
@@ -37,6 +39,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
+
     const mapContainer = useRef<HTMLDivElement>(null);
     const geolocationMarkerRef = useRef<maplibregl.Marker | null>(null);
     const mapRef = useRef<maplibregl.Map | null>(null);
@@ -44,7 +47,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
     const [mapReady, setMapReady] = useState(false);
     const [mapError, setMapError] = useState<string | null>(null);
     const moveTimeout = useRef<NodeJS.Timeout | null>(null);
-    const [selectStation, setSelectStation] = useState<IStations | null>(null);
+    const [selectStation, setSelectStation] = useState<IStation | null>(null);
     const [isLocating, setIsLocating] = useState(false);
 
 
@@ -145,6 +148,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
         stationsMarkersRef.current = [];
 
         data.forEach((s) => {
+            const coords = getCords(s.cords)
 
             const markerContainer = document.createElement('div');
             markerContainer.style.cursor = 'pointer';
@@ -163,7 +167,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
 
                 if (mapRef.current) {
                     mapRef.current.easeTo({
-                        center: [s.x, s.y],
+                        center: coords,
                         duration: 800,
                         zoom: 15,
 
@@ -178,7 +182,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
                 element: markerContainer,
                 anchor: 'center',
             })
-                .setLngLat([s.x, s.y])
+                .setLngLat(coords)
                 .addTo(map);
 
 

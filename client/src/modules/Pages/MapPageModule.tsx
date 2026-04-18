@@ -10,7 +10,7 @@ export default function MapPageModule() {
 
     return(
         <Box sx={{height:'94vh', width:'100%'}}>
-            <ActionMap stations={data}/>
+            <ActionMap data={data}/>
             <DashBoard/>
         </Box>
     )
