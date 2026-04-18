@@ -8,11 +8,7 @@ import ButtonRufuelCard from "@/components/Buttons/ButtonRufuelCard";
 import {IAdressType} from "@/types/StationsType";
 
 interface IStationCard {
-    vt: number;
-    price: number;
-    connector: string;
-    address: IAdressType;
-    Net: string;
+
 
 }
 
