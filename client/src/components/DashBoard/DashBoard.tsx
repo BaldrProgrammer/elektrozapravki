@@ -74,7 +74,7 @@ export default function DashBoard() {
                     left: 0,
                     width: '100%',
 
-                    height: isMobile ? '65vh' : 480,
+                    height: isMobile ? '70vh' : 480,
 
                     transform: open
                         ? 'translateY(0)'
