@@ -30,7 +30,10 @@ async def get_all_stations(filters) -> List[SStationGet]:
 
 @router.get('/by_characteristics')
 async def get_all_stations(filters) -> List[SStationGet]:
-    return await StationsDAO.find_all_by_characteristics(json.loads(filters))
+    try:
+        return await StationsDAO.find_all_by_characteristics(json.loads(filters))
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid JSON syntax')
 
 
 @router.get('/get_nearest_station')
