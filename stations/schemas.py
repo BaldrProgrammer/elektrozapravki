@@ -18,6 +18,7 @@ class SStationAdd(BaseModel):
 
 
 class SStationGet(BaseModel):
+    id: int
     name: str
     cords: str
     address: dict
