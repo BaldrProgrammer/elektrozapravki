@@ -22,7 +22,10 @@ async def get_all_stations(user_id: int) -> SStationGet:
 
 @router.get('/by_filters')
 async def get_all_stations(filters) -> List[SStationGet]:
-    return await StationsDAO.find_all(**json.loads(filters))
+    try:
+        return await StationsDAO.find_all(**json.loads(filters))
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid JSON syntax')
 
 
 @router.get('/by_characteristics')
