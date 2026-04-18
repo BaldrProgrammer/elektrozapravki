@@ -7,7 +7,7 @@ const colors = {
         background: '#06021d',
         surface: '#0f0a2a',
         surfaceLight: '#1a1240',
-        text: '#e8e4ff',
+        text: '#f2eeff',
         textSecondary: '#ad8bfb',
         divider: 'rgba(173, 139, 251, 0.2)',
     },

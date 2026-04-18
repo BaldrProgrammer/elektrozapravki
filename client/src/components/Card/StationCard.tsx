@@ -43,11 +43,11 @@ export default function StationCard({
         <Box
             sx={{
                 width: '100%',
-                height: 'auto',
-                minHeight: 420,
-                p: 2,
-                borderTopLeftRadius: 32,
-                borderTopRightRadius: 32,
+                height: '63vh',
+                px: 4,
+                pt: 5,
+                borderTopLeftRadius: 42,
+                borderTopRightRadius: 42,
                 backdropFilter: 'blur(14px)',
                 background:
                     theme.palette.mode === 'dark'
@@ -62,7 +62,7 @@ export default function StationCard({
         >
 
             <Box>
-                <Typography variant="h6" sx={{ fontWeight: 600, textAlign: 'center' }}>
+                <Typography variant="h4" sx={{ fontWeight: 600, textAlign: 'center', mb:2, }}>
                     {name || 'Электрозарядная станция'}
                 </Typography>
 

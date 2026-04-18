@@ -171,7 +171,7 @@ const ActionMap: React.FC<IActionMapProps> = ({
                         duration: 800,
                         zoom: 15,
 
-                        offset: [0, -150],
+                        offset: [0, -210],
                     });
                 }
 

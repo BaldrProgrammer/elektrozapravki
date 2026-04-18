@@ -31,7 +31,7 @@ export default function InputSt({
             sx={{
                 '& .MuiOutlinedInput-root': {
                     borderRadius: '16px',
-                    height: '40px',
+                    height: 40,
                     transition: 'all 0.2s ease',
                     boxShadow:
                         theme.palette.mode === 'dark'
@@ -39,14 +39,15 @@ export default function InputSt({
                             : '0 0 4px rgba(248, 80, 10, 0.15)',
                     '& input': {
                         padding: '0 12px',
+                        borderRadius: '16px',
                         height: '100%',
                         display: 'flex',
                         alignItems: 'center',
                         boxSizing: 'border-box',
+                        border:'1px solid transparent',
+                        background: 'linear-gradient( #fff, #fff, #fff) padding-box, linear-gradient(to right, #ad8bfb, #ad8bfb, #ad8bfb, #e8e4ff) border-box',
                     },
-                    '& fieldset': {
-                        borderColor: theme.palette.primary.light,
-                    },
+
 
                     '&:hover fieldset': {
                         borderColor: theme.palette.primary.main,

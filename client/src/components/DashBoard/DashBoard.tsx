@@ -7,6 +7,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import InputSt from "@/components/Input/InputSt";
 import ButtonStation from "@/components/Buttons/ButtonStation";
 import {useMediaQuery} from "@mui/material";
+import {Button} from "@mui/material";
+
 
 export default function DashBoard() {
     const [open, setOpen] = useState(true);
@@ -75,7 +77,7 @@ export default function DashBoard() {
                     left: 0,
                     width: '100%',
 
-                    height: isMobile ? '60vh' : 440,
+                    height: isMobile ? '65vh' : 480,
 
                     transform: open
                         ? 'translateY(0)'
@@ -85,19 +87,18 @@ export default function DashBoard() {
 
                     transition: 'transform 0.35s ease',
                     zIndex: 999,
-                    backdropFilter: 'blur(20px)',
-                    background: theme.components?.MuiPaper,
-                    borderTop: '1px solid rgba(173, 139, 251, 0.2)',
-
-                    borderTopLeftRadius: isMobile ? 0 : '20px',
-                    borderTopRightRadius: isMobile ? 0 : '20px',
+                    background:'rgba(255,255,255,0.83)',
+                    backdropFilter: 'blur(14px)',
+                    borderTopLeftRadius: 44,
+                    borderTopRightRadius: 44,
 
                     p: isMobile ? 2 : 3,
+                    pt:5,
 
                     overflowY: 'auto',
                 }}
             >
-                <Typography variant="h3" sx={{ mb: 2, textAlign:'center'}}>
+                <Typography variant="h3" sx={{ mb: 4, textAlign:'center'}}>
                     Поиск электростанции
                 </Typography>
 

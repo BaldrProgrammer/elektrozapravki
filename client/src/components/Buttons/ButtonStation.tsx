@@ -24,7 +24,15 @@ export default function ButtonStation({
             variant = 'contained'
             sx={{
                 width:220,
-                color:'#fff',
+                height:40,
+                borderRadius: 12,
+                color:'rgb(26,18,64)',
+
+                boxShadow: `
+                  inset 0 0 30px #ad8bfb
+                `,
+                border:'2px solid transparent',
+                background: 'linear-gradient( #fff, #fff, #fff) padding-box, linear-gradient(to right, #f2eeff, #ad8bfb, #ad8bfb, #f2eeff) border-box',
                 ...sx
             }}
         >
