@@ -13,15 +13,32 @@ interface StationSearchFormProps {
     initialValues?: Partial<IStationNear>;
 }
 
+interface ICord {
+    lat: string,
+    lon: string
+}
+interface IFormState {
+    lat: string;
+    lon: string;
+    filters: {
+        kwt: string;
+        type: string;
+    };
+}
 
+type AllFields = keyof IStationNear | keyof IFiltres;
 
 export default function StationSearchForm({ onSubmit, initialValues }: StationSearchFormProps) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const [values, setValues] = useState({ lat: '', lon: '', filters: {} });
+    const [values, setValues] = useState<IFormState>({
+        lat: '',
+        lon: '',
+        filters: { kwt: '', type: '' }
+    });
     const [useAutoGeo, setUseAutoGeo] = useState(true);
-    const [errors, setErrors] = useState<Partial<Record<keyof IStationNear, string>>>({});
-    const [touched, setTouched] = useState<Partial<Record<keyof IStationNear, boolean>>>({});
+    const [errors, setErrors] = useState<Partial<Record<AllFields, string>>>({});
+    const [touched, setTouched] = useState<Partial<Record<AllFields, boolean>>>({});
     const [filters, setFilters] = useState<IStationNear>({
         lat: initialValues?.lat || '',
         lon: initialValues?.lon || '',
@@ -32,18 +49,22 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
     });
 
 
-    const handleChange = (field: keyof IStationNear | keyof IFiltres) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (field: AllFields) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
 
         setValues(prev => {
-            // Если меняем lat или lon
-            if (field === 'lat' || field === 'lon') {
-                return { ...prev, [field]: value };
+            if (field === 'type' || field === 'kwt') {
+                return {
+                    ...prev,
+                    filters: {
+                        ...prev.filters,
+                        [field]: value
+                    }
+                };
             }
-            // Если меняем то, что внутри filters (kwt или type)
             return {
                 ...prev,
-                filters: { ...prev.filters, [field]: value }
+                [field]: value
             };
         });
     };
@@ -52,9 +73,9 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
     console.log(station, 'sdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdsdfsfdsfdsddfsdf')
 
 
-    const validateField = (field: keyof IStationNear, value: string) => {
+    const validateField = (field: AllFields, value: string) => {
         let error = '';
-       if (field === 'type' && value.trim().length < 2) {
+        if (field === 'type' && value.trim().length < 2) {
             error = 'Введите корректный тип коннектора';
         } else if (field === 'lat' && (isNaN(Number(value)) || Math.abs(Number(value)) > 90)) {
             error = 'Широта от -90 до 90';
@@ -73,10 +94,21 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
 
         let isValid = true;
         fieldsToValidate.forEach(field => {
-            const fieldKey = field as keyof IStationNear;
-            const isFieldValid = validateField(fieldKey, filters[fieldKey]);
+            const fieldKey = field as AllFields;
+            let value: string = '';
+
+            if (fieldKey === 'kwt' || fieldKey === 'type') {
+                value = (values.filters as any)[fieldKey] || '';
+            } else if (fieldKey === 'lat' || fieldKey === 'lon') {
+                value = (values as any)[fieldKey] || '';
+            }
+
+        const isFieldValid = validateField(fieldKey, value);
+
             if (!isFieldValid) isValid = false;
+
             setTouched(prev => ({ ...prev, [fieldKey]: true }));
+
         });
         return isValid;
     };
@@ -88,7 +120,10 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
         setSend((prev)=>(!prev))
     };
 
-    const getFieldError = (field: keyof IStationNear) => {
+    const getFieldError = (field: keyof IFiltres) => {
+        return touched[field] && errors[field] ? errors[field] : '';
+    };
+    const getFieldErrorCord = (field: keyof ICord) => {
         return touched[field] && errors[field] ? errors[field] : '';
     };
 
@@ -112,7 +147,7 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <InputSt
                         label="Коннектор"
-                        value={filters.filters.type}
+                        value={String(values.filters.type ?? '')}
                         onChange={handleChange('type')}
                         error={!!getFieldError('type')}
                         helperText={getFieldError('type')}
@@ -124,7 +159,7 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <InputSt
                         label="Мощность"
-                        value={filters.filters.kwt}
+                        value={String(values.filters.kwt ?? '')}
                         onChange={handleChange('kwt')}
                         error={!!getFieldError('kwt')}
                         helperText={getFieldError('kwt')}
@@ -159,20 +194,20 @@ export default function StationSearchForm({ onSubmit, initialValues }: StationSe
                     <Box sx={{ display: 'flex', gap: 1 }}>
                         <InputSt
                             label="lat"
-                            value={filters.lat}
+                            value={String(values.lat ?? '')}
                             onChange={handleChange('lat')}
-                            error={!!getFieldError('lat')}
-                            helperText={getFieldError('lat')}
+                            error={!!getFieldErrorCord('lat')}
+                            helperText={getFieldErrorCord('lat')}
                             disabled={useAutoGeo}
                             required={!useAutoGeo}
                             sx={{ width: 100 }}
                         />
                         <InputSt
                             label="lon"
-                            value={filters.lon}
+                            value={String(values.lon ?? '')}
                             onChange={handleChange('lon')}
-                            error={!!getFieldError('lon')}
-                            helperText={getFieldError('lon')}
+                            error={!!getFieldErrorCord('lon')}
+                            helperText={getFieldErrorCord('lon')}
                             disabled={useAutoGeo}
                             required={!useAutoGeo}
                             sx={{ width: 100 }}

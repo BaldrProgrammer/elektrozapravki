@@ -25,12 +25,11 @@ export default function useNeareStation(filters: IStationNear) {
                     }
                 };
 
-                const response = await fetch('http://127.0.0.1:8000/stations/get_thebest_station', {
-                    method: 'PATCH',
+                const response = await fetch(`http://127.0.0.1:8000/stations/get_thebest_station?filters=${requestBody.filters}lat=${requestBody.lat}&lon=${requestBody.lon}`, {
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(requestBody)
                 });
 
                 if (!response.ok) {
